@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="tangenta.github.io/"/>
-  <updated>2017-09-23T12:47:18.134Z</updated>
+  <updated>2017-09-27T04:53:16.176Z</updated>
   <id>tangenta.github.io/</id>
   
   <author>
@@ -17,13 +17,20 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>test</title>
-    <link href="tangenta.github.io/2017/09/23/test/"/>
-    <id>tangenta.github.io/2017/09/23/test/</id>
-    <published>2017-09-23T12:47:18.000Z</published>
-    <updated>2017-09-23T12:47:18.134Z</updated>
+    <title>常用Linux命令实例 (长期更新)</title>
+    <link href="tangenta.github.io/2017/09/24/Linux%20%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4%EF%BC%88%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%EF%BC%89/"/>
+    <id>tangenta.github.io/2017/09/24/Linux 实用命令（长期更新）/</id>
+    <published>2017-09-24T13:10:56.000Z</published>
+    <updated>2017-09-27T04:53:16.176Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="文本文件在windows和linux之间的相互转换"><a href="#文本文件在windows和linux之间的相互转换" class="headerlink" title="文本文件在windows和linux之间的相互转换"></a>文本文件在windows和linux之间的相互转换</h2><p>差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。</p><p>windows -&gt; linux: 多出来的 <strong>/r</strong> 文件换行符在vi下以 <strong>^M</strong> 的形式呈现。</p><ul><li><p>移除 <strong>^M</strong>: <code>sed -i &#39;s/^M//g&#39; fileName</code></p><blockquote><p><strong>-i</strong>  : 直接修改文件内容，不输出<br><strong>s</strong>  : 取代<br><strong>^M</strong> : 通过ctrl+v ctrl+m 输入<br><strong>g</strong>  : 应用于全局<br>‘s/匹配文本/替换文本/g’</p></blockquote></li><li><p>添加<strong>^M</strong>: <code>sed -i &#39;s/$/^M/g&#39; fileName</code></p><blockquote><p><strong>$</strong>: 匹配行末</p></blockquote></li><li><p>转换编码方式: <code>iconv -f gbk -t utf8 fileName &gt; newFileName</code></p><blockquote><p><strong>-f</strong>: from<br> <strong>-t</strong>: to</p></blockquote></li></ul>]]></content>
     
     <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;文本文件在windows和linux之间的相互转换&quot;&gt;&lt;a href=&quot;#文本文件在windows和linux之间的相互转换&quot; class=&quot;headerlink&quot; title=&quot;文本文件在windows和linux之间的相互转换&quot;&gt;&lt;/a&gt;文本文件在window
+      
     
     </summary>
     
@@ -37,7 +44,7 @@
     <published>2017-09-23T12:43:01.214Z</published>
     <updated>2017-09-23T12:43:01.214Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>]]></content>
     
     <summary type="html">
     
