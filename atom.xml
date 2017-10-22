@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="tangenta.github.io/"/>
-  <updated>2017-09-28T07:59:36.856Z</updated>
+  <updated>2017-10-22T14:47:44.952Z</updated>
   <id>tangenta.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>邂逅异或链表</title>
+    <link href="tangenta.github.io/2017/10/22/%E9%82%82%E9%80%85%E5%BC%82%E6%88%96%E9%93%BE%E8%A1%A8/"/>
+    <id>tangenta.github.io/2017/10/22/邂逅异或链表/</id>
+    <published>2017-10-22T13:39:40.000Z</published>
+    <updated>2017-10-22T14:47:44.952Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="零、"><a href="#零、" class="headerlink" title="零、"></a>零、</h4><p>数据结构课上刷轮子哥，看到一条关于链表的回答，意思大概是 “可以用猥琐的方法把节点的前驱后继地址压缩为一个值，实现双向遍历”。必应搜索一波，于是课还没上完，满脑子都是”异或链表”的骚操作。想也正好，刚刚布置的链表作业又没写着”不能用异或链表”这几个字，咱说干就干。</p><h4 id="一、"><a href="#一、" class="headerlink" title="一、"></a>一、</h4><p>异或链表的原理是，表中的每个节点跟单链表一样，都有俩区域: 数据域和指针域。这个指针域就厉害了，存的不是别人，而是它前后节点地址的异或。得益于异或运算的性质，任何时候只需要知道链表中相邻的两个节点地址，就可以访问其中的每一个节点。以前只听过异或运算能用来实现inplace swap(不需要额外的空间就可以交换两个变量)，没想到还能应用到链表中。</p><h4 id="二、"><a href="#二、" class="headerlink" title="二、"></a>二、</h4><p>看起来很简单嘛，内嵌一个节点类，复制控制函数压死，再上容器四大护法增删改查，一切都很顺利……嗯？这段怎么这么deja vu？定睛一看，这几段都有遍历操作，而每次遍历都用到两个节点指针，一前一后一个while，内部再一个判断一个break。想起scott mayers教导我们，代码复制不可取。今天复制一段代码，明天就会复制一个文件，后天……跑题了，总之作为一个有理想的青年，代码复制要不得。想到这里，我这暴脾气就上来了，一顿操作从删掉重写到发朋友圈，丝毫不拖泥带水，思考时被我拔掉的头发也不算特别多。这个是效果：</p><p>修改前：<br><img src="/images/2017-10-22-1.png" width="50%" height="50%"></p><p>修改后：<br><img src="/images/2017-10-22-2.png" width="50%" height="50%"></p><p><img src="/images/2017-10-22-3.png" width="100%" height="100%"></p><p>将判断条件、迭代调整、返回值做成函数调用形式，达到用模板参数传递”功能“(函数指针、函数对象或lambda表达式)的目的。简单说就是从外部把功能嵌入函数体中。</p><p>一个traverse函数打天下 =_=</p><h4 id="四、"><a href="#四、" class="headerlink" title="四、"></a>四、</h4><p>敲定最后一个lambda表达式，好不容易松了口气，正欣赏着”成果”，不知道《C++ template》的哪一个混蛋作者在我脑子里喊了句”code bloat”，顿时整个人就不好了…</p><p>我、lambda表达式们大眼瞪小眼，看着一个个的lambda(s?)，每个类型都不相同，每个traverse都要实例化，我仿佛已经看到了目标文件的臃肿，至此，我成了滥用模板的恶人。</p><h4 id="五、"><a href="#五、" class="headerlink" title="五、"></a>五、</h4><p>我不甘心啊！伴随着更多头发的飘落，”遍历“这个词终于让我联想到了”迭代器“。是啊，为什么不搞一个迭代器呢？for(List<t>::iterator i = v.begin(); i != v.end(); ++i) {…}，<br>多么优雅。但是迭代器内部的数据一般只有一个指针，而异或链表的遍历必须由两个指针贴着走。那一个迭代器包含两个指针行不行呢？开始尝试：</t></p><p><img src="/images/2017-10-22-4.png" width="100%" height="100%"></p><p>(中间踩了点小坑，这里省略一万字，”explicit你都干了些什么”、”包含编译模型之凝视”、”const成员函数之谜”、”多余&amp;引发的运行时血案”之类的不再细叙)</p><p>最终效果如下：<br><img src="/images/2017-10-22-5.png" width="100%" height="100%"></p><p>虽然简陋版迭代器是写出来了，但不知道它和stl算法的结合情况如何。哪天出乱子了我再收拾它去。</p><pre><code>return (待续||不续);}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;零、&quot;&gt;&lt;a href=&quot;#零、&quot; class=&quot;headerlink&quot; title=&quot;零、&quot;&gt;&lt;/a&gt;零、&lt;/h4&gt;&lt;p&gt;数据结构课上刷轮子哥，看到一条关于链表的回答，意思大概是 “可以用猥琐的方法把节点的前驱后继地址压缩为一个值，实现双向遍历”。必应搜索一波，
+      
+    
+    </summary>
+    
+    
+      <category term="感悟" scheme="tangenta.github.io/tags/%E6%84%9F%E6%82%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>git学习笔记</title>
@@ -68,7 +91,7 @@
     <link href="tangenta.github.io/2017/09/24/Linux%E5%91%BD%E4%BB%A4%E5%AE%9E%E4%BE%8B%EF%BC%88%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%EF%BC%89/"/>
     <id>tangenta.github.io/2017/09/24/Linux命令实例（长期更新）/</id>
     <published>2017-09-24T13:10:56.000Z</published>
-    <updated>2017-09-27T10:47:22.168Z</updated>
+    <updated>2017-10-22T14:45:19.664Z</updated>
     
     <content type="html"><![CDATA[<h2 id="文本文件在windows和linux之间的相互转换"><a href="#文本文件在windows和linux之间的相互转换" class="headerlink" title="文本文件在windows和linux之间的相互转换"></a>文本文件在windows和linux之间的相互转换</h2><p>差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。</p><p>windows -&gt; linux: 多出来的 <strong>/r</strong> 文件换行符在vi下以 <strong>^M</strong> 的形式呈现。</p><ul><li><p>移除 <strong>^M</strong>: <code>sed -i &#39;s/^M//g&#39; fileName</code></p><blockquote><p><strong>-i</strong>  : 直接修改文件内容，不输出<br><strong>s</strong>  : 取代<br><strong>^M</strong> : 通过ctrl+v ctrl+m 输入<br><strong>g</strong>  : 应用于全局<br>‘s/匹配文本/替换文本/g’</p></blockquote></li><li><p>添加<strong>^M</strong>: <code>sed -i &#39;s/$/^M/g&#39; fileName</code></p><blockquote><p><strong>$</strong>: 匹配行末</p></blockquote></li><li><p>转换编码方式: <code>iconv -f gbk -t utf8 fileName &gt; newFileName</code></p><blockquote><p><strong>-f</strong>: from<br> <strong>-t</strong>: to</p></blockquote></li></ul>]]></content>
     
@@ -81,6 +104,8 @@
     
     </summary>
     
+    
+      <category term="linux" scheme="tangenta.github.io/tags/linux/"/>
     
   </entry>
   
