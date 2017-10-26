@@ -52,7 +52,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="c++," />
 
 
 
@@ -68,13 +68,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Road to PI&#x2F;2">
-<meta property="og:url" content="tangenta.github.io/archives/2017/09/index.html">
+<meta name="description" content="废话不多说，先出一道题：给定一个行数=3的文本文件，如何把每行的内容读出来存到std::vector里面？">
+<meta name="keywords" content="c++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++读文件操作暗礁">
+<meta property="og:url" content="tangenta.github.io/2017/10/26/fstream-trap/index.html">
 <meta property="og:site_name" content="Road to PI&#x2F;2">
+<meta property="og:description" content="废话不多说，先出一道题：给定一个行数=3的文本文件，如何把每行的内容读出来存到std::vector里面？">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-26T14:07:09.717Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Road to PI&#x2F;2">
+<meta name="twitter:title" content="C++读文件操作暗礁">
+<meta name="twitter:description" content="废话不多说，先出一道题：给定一个行数=3的文本文件，如何把每行的内容读出来存到std::vector里面？">
 
 
 
@@ -103,13 +108,13 @@
 
 
 
-  <link rel="canonical" href="tangenta.github.io/archives/2017/09/"/>
+  <link rel="canonical" href="tangenta.github.io/2017/10/26/fstream-trap/"/>
 
 
 
 
 
-  <title>归档 | Road to PI/2</title>
+  <title>C++读文件操作暗礁 | Road to PI/2</title>
   
 
 
@@ -134,7 +139,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -218,148 +223,183 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2017/10/26/fstream-trap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tangenta">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Road to PI/2">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h2 class="post-title" itemprop="name headline">C++读文件操作暗礁</h2>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T21:16:01+08:00">
+                2017-10-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T22:07:09+08:00">
+                2017-10-26
+              </time>
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 5 篇日志。 继续努力。
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/28/git学习笔记/" itemprop="url">
-              
-                <span itemprop="name">git学习笔记</span>
-              
-            </a>
-        
-      </h3>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-28T15:58:52+08:00"
-              content="2017-09-28" >
-          09-28
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/27/GDB常用命令汇总/" itemprop="url">
-              
-                <span itemprop="name">GDB常用命令汇总</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-27T20:36:49+08:00"
-              content="2017-09-27" >
-          09-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h3 class="post-title">
-        
-            <a class="post-title-link" href="/2017/09/24/Linux命令实例（长期更新）/" itemprop="url">
-              
-                <span itemprop="name">Linux命令实例 (长期更新)</span>
-              
-            </a>
-        
-      </h3>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-24T21:10:56+08:00"
-              content="2017-09-24" >
-          09-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
+        <p>废话不多说，先出一道题：<br>给定一个<strong>行数=3</strong>的文本文件，如何把每行的内容读出来存到std::vector<string>里面？<br><a id="more"></a></string></p>
+<p>如果你的答案是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function">fstream <span class="title">in</span><span class="params">(<span class="string">"text"</span>)</span></span>;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v;</div><div class="line"><span class="built_in">string</span> buf;</div><div class="line"><span class="keyword">while</span>(in) &#123;</div><div class="line">  in&gt;&gt;buf;</div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>那么我掐指一算：<br>你最近是不是感觉到你写的文件读写程序，行为有点怪异？<br>是不是忍不住发出惊叹“明明读完了啊，怎么多一行“？<br>是不是把fstream里面有关good/eof/fail/bad的文档全看了一遍，还是找不到问题在哪？<br>是不是才爬个5楼，就觉得胸闷气短…<br>咳，回到正题：如果在最后加一句</p>
+<pre><code>cout&lt;&lt;v.size()&lt;&lt;&quot;\n&quot;;
+</code></pre><p>发现结果是4。分析一下原因：在in&gt;&gt;buf读取文件最后一行的时候，状态为goodbit，v.push_back正常读入最后一行;再次判断循环条件，由于goodbit，进入循环;这时in&gt;&gt;tmp就开始出问题了，它读到了文件结束符eof。然而我们的buf可不管，读不到东西也push_back，这就造成size比行数大1的结果。<br>总结起来一句话就是：<strong>“从文件读取到缓冲”和”从缓冲输入到容器”之间没有空隙，即无条件连接。</strong><br>显然，while的条件判断起作用的时机晚了。一个解决方案是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;<span class="comment">//solution1</span></div><div class="line">  in&gt;&gt;buf;</div><div class="line">  <span class="keyword">if</span> (!in) <span class="keyword">break</span>;</div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>其等价于<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(in&gt;&gt;buf) &#123;<span class="comment">//solution2</span></div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>第二个解决方案也是C++中的惯用法(idiom)，更为简洁、美观。</p>
+<pre><code>return;
+}
+</code></pre>
+      
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    tangenta
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="tangenta.github.io/2017/10/26/fstream-trap/" title="C++读文件操作暗礁">tangenta.github.io/2017/10/26/fstream-trap/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag"># c++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/22/xorLinkedList/" rel="next" title="邂逅异或链表">
+                <i class="fa fa-chevron-left"></i> 邂逅异或链表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -367,6 +407,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -585,11 +629,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
 
 
   
