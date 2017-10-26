@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -44,32 +44,6 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
@@ -84,8 +58,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Road to PI/2" type="application/atom+xml" />
-
 
 
 
@@ -96,18 +68,18 @@
 
 
 
-<meta name="description" content="文本文件在windows和linux之间的相互转换差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。 windows -&amp;gt; linux: 多出来的 /r 文件换行符在vi下以 ^M 的形式">
+<meta name="description" content="记录常用linux命令">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux命令实例 (长期更新)">
 <meta property="og:url" content="tangenta.github.io/2017/09/24/Linux命令实例（长期更新）/index.html">
 <meta property="og:site_name" content="Road to PI&#x2F;2">
-<meta property="og:description" content="文本文件在windows和linux之间的相互转换差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。 windows -&amp;gt; linux: 多出来的 /r 文件换行符在vi下以 ^M 的形式">
+<meta property="og:description" content="记录常用linux命令">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-22T14:45:19.664Z">
+<meta property="og:updated_time" content="2017-10-26T10:09:11.483Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux命令实例 (长期更新)">
-<meta name="twitter:description" content="文本文件在windows和linux之间的相互转换差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。 windows -&amp;gt; linux: 多出来的 /r 文件换行符在vi下以 ^M 的形式">
+<meta name="twitter:description" content="记录常用linux命令">
 
 
 
@@ -115,7 +87,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":true,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -213,28 +185,8 @@
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/archives" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -244,7 +196,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/tags" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -330,8 +282,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T22:45:19+08:00">
-                2017-10-22
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T18:09:11+08:00">
+                2017-10-26
               </time>
             
           </span>
@@ -364,7 +316,8 @@
       
 
       
-        <h2 id="文本文件在windows和linux之间的相互转换"><a href="#文本文件在windows和linux之间的相互转换" class="headerlink" title="文本文件在windows和linux之间的相互转换"></a>文本文件在windows和linux之间的相互转换</h2><p>差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。</p>
+        <p>记录常用linux命令<br><a id="more"></a></p>
+<h2 id="文本文件在windows和linux之间的相互转换"><a href="#文本文件在windows和linux之间的相互转换" class="headerlink" title="文本文件在windows和linux之间的相互转换"></a>文本文件在windows和linux之间的相互转换</h2><p>差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。</p>
 <p>windows -&gt; linux: 多出来的 <strong>/r</strong> 文件换行符在vi下以 <strong>^M</strong> 的形式呈现。</p>
 <ul>
 <li><p>移除 <strong>^M</strong>: <code>sed -i &#39;s/^M//g&#39; fileName</code></p>
@@ -430,10 +383,6 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/09/23/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
             
           </div>
 
@@ -519,8 +468,8 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">5</span>
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -532,25 +481,42 @@
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
         </nav>
 
         
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
-        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tangenta" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://gitee.com/tangenta" target="_blank" title="Gitee">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Gitee
+                    
+                </a>
+              </span>
+            
           
         </div>
 
@@ -558,24 +524,6 @@
         
 
         
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="/atom.xml" title="Feed" target="_blank">Feed</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
-                </li>
-              
-            </ul>
-          </div>
         
 
         
@@ -593,7 +541,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文本文件在windows和linux之间的相互转换"><span class="nav-number">1.</span> <span class="nav-text">文本文件在windows和linux之间的相互转换</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文本文件在windows和linux之间的相互转换"><span class="nav-text">文本文件在windows和linux之间的相互转换</span></a></li></ol></div>
             
 
           </div>
@@ -636,7 +584,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Pisces
   </a>
 </div>
 
@@ -710,6 +658,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>

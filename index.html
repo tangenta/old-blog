@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -44,32 +44,6 @@
 
 
 
-  
-  
-  
-  
-
-  
-    
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    
-    
-    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-  
-
-
-
 
 
 
@@ -83,8 +57,6 @@
 
 
 
-
-  <link rel="alternate" href="/atom.xml" title="Road to PI/2" type="application/atom+xml" />
 
 
 
@@ -110,7 +82,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":true,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
@@ -210,28 +182,8 @@
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/archives" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -241,7 +193,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/tags" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -282,7 +234,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2017/10/22/邂逅异或链表/">
+    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2017/10/22/xorLinkedList/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="tangenta">
@@ -301,7 +253,7 @@
         
           <h2 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/22/邂逅异或链表/" itemprop="url">邂逅异或链表</a></h2>
+                <a class="post-title-link" href="/2017/10/22/xorLinkedList/" itemprop="url">邂逅异或链表</a></h2>
         
 
         <div class="post-meta">
@@ -329,8 +281,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-10-23T09:20:23+08:00">
-                2017-10-23
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T19:12:46+08:00">
+                2017-10-26
               </time>
             
           </span>
@@ -364,29 +316,14 @@
 
       
         
-          
-            <h2 id="零、"><a href="#零、" class="headerlink" title="零、"></a>零、</h2><p>数据结构课上刷轮子哥，看到一条关于链表的回答，意思大概是 “可以用猥琐的方法把节点的前驱后继地址压缩为一个值，实现双向遍历”。必应搜索一波，于是课还没上完，满脑子都是”异或链表”的骚操作。想也正好，刚刚布置的链表作业又没写着”不能用异或链表”这几个字，咱说干就干。</p>
-<h2 id="一、"><a href="#一、" class="headerlink" title="一、"></a>一、</h2><p>异或链表的原理是，表中的每个节点跟单链表一样，都有俩区域: 数据域和指针域。这个指针域就厉害了，存的不是别人，而是它前后节点地址的异或。得益于异或运算的性质，任何时候只需要知道链表中相邻的两个节点地址，就可以访问其中的每一个节点。以前只听过异或运算能用来实现inplace swap(不需要额外的空间就可以交换两个变量)，没想到还能应用到链表中。</p>
-<h2 id="二、"><a href="#二、" class="headerlink" title="二、"></a>二、</h2><p>看起来很简单嘛，内嵌一个节点类，复制控制函数压死，再上容器四大护法增删改查，一切都很顺利……嗯？这段怎么这么deja vu？定睛一看，这几段都有遍历操作，而每次遍历都用到两个节点指针，一前一后一个while，内部再一个判断一个break。想起scott mayers教导我们，代码复制不可取。今天复制一段代码，明天就会复制一个文件，后天……跑题了，总之作为一个有理想的青年，代码复制要不得。想到这里，我这暴脾气就上来了，一顿操作从删掉重写到发朋友圈，丝毫不拖泥带水，思考时被我拔掉的头发也不算特别多。这个是效果：</p>
-<p>修改前：<br><img src="/images/2017-10-22-1.png" width="50%" height="50%"></p>
-<p>修改后：<br><img src="/images/2017-10-22-2.png" width="50%" height="50%"></p>
-<p><img src="/images/2017-10-22-3.png" width="100%" height="100%"></p>
-<p>将判断条件、迭代调整、返回值做成函数调用形式，达到用模板参数传递”功能“(函数指针、函数对象或lambda表达式)的目的。简单说就是从外部把功能嵌入函数体中。</p>
-<p>一个traverse函数打天下 =_=</p>
-<h2 id="三、"><a href="#三、" class="headerlink" title="三、"></a>三、</h2><p>敲定最后一个lambda表达式，好不容易松了口气，正欣赏着”成果”，不知道《C++ template》的哪一个混蛋作者在我脑子里喊了句”code bloat”。</p>
-<p>。。。</p>
-<p>。。。</p>
-<p>我、lambda表达式们大眼瞪小眼，这时我才发现一个个的lambda(s?)，每个类型都不相同，这意味着几乎每次使用到traverse()都要实例化，我仿佛已经看到了目标文件的臃肿。再一细看，还把traverse写成了public。典型滥用模板的例子，哎。</p>
-<h2 id="四、"><a href="#四、" class="headerlink" title="四、"></a>四、</h2><p>我不甘心啊！伴随着更多头发的飘落，”遍历“这个词终于让我联想到了”迭代器“。是啊，为什么不搞一个迭代器呢？<br>for(List<t>::iterator i = v.begin(); i != v.end(); ++i) {…}，<br>多么优雅。但是迭代器内部的数据一般只有一个指针，而异或链表的遍历必须由两个指针贴着走。那一个迭代器包含两个指针行不行呢？开始尝试：</t></p>
-<p><img src="/images/2017-10-22-4.png" width="100%" height="100%"><br>解引用操作和指针操作都取ptr2，{ptr1 = 0; ptr2 = head}对应begin，{ptr1 = tail, ptr2 = 0}对应end，没毛病。</p>
-<p>(中间踩了点小坑，这里省略一万字，”explicit你都干了些什么”、”包含编译模型之凝视”、”const成员函数之谜”、”多余&amp;引发的运行时血案”之类的不再细叙)</p>
-<p>最终效果如下：<br>(这是获得第pos-1个节点和第pos个节点指针的具体实现)<br><img src="/images/2017-10-22-5.png" width="100%" height="100%"><br>很明显，无论是易读性、可维护性都提高了不少。</p>
-<p><a href="https://gitee.com/tangenta/XorList.git" target="_blank" rel="external">XorList源码</a></p>
-<p>虽然简陋版迭代器是写出来了，但不知道它和stl算法的结合情况如何。哪天出乱子了我再收拾它去。</p>
-<pre><code>return (待续||不续);
-}
-</code></pre>
-          
+          <p>数据结构课上刷轮子哥，看到一条关于链表的回答，意思大概是 “可以用猥琐的方法把节点的前驱后继地址压缩为一个值，实现双向遍历”。必应搜索一波，于是课还没上完，满脑子都是”异或链表”的骚操作。想也正好，刚刚布置的链表作业又没写着”不能用异或链表”这几个字，咱说干就干。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/22/xorLinkedList/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -480,8 +417,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-10-25T20:13:02+08:00">
-                2017-10-25
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T18:44:37+08:00">
+                2017-10-26
               </time>
             
           </span>
@@ -515,299 +452,14 @@
 
       
         
-          
-            <h2 id="创建git仓库"><a href="#创建git仓库" class="headerlink" title="创建git仓库"></a>创建git仓库</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git init</td>
-<td>在当前目录初始化仓库</td>
-</tr>
-</tbody>
-</table>
-<h2 id="提交-上传文件"><a href="#提交-上传文件" class="headerlink" title="提交/上传文件"></a>提交/上传文件</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git add fileName</td>
-<td>将工作区文件添加到暂存区</td>
-</tr>
-<tr>
-<td> $ git commit -m “some comment”</td>
-<td>将暂存区文件添加到版本库</td>
-</tr>
-</tbody>
-</table>
-<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git rm fileName</td>
-<td>删掉暂存区的文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="查看信息"><a href="#查看信息" class="headerlink" title="查看信息"></a>查看信息</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git status</td>
-<td>显示仓库当前状态</td>
-</tr>
-<tr>
-<td> $ git diff fileName</td>
-<td>显示工作区和版本库的差异</td>
-</tr>
-<tr>
-<td> $ git log [–pretty=oneline] [–graph] [–abbrev-commit]</td>
-<td>显示版本库内的commit历史记录 [以单行的形式显示][显示分支图]</td>
-</tr>
-<tr>
-<td> $ git reflog</td>
-<td>显示版本变更的历史命令</td>
-</tr>
-<tr>
-<td> $ git branch</td>
-<td>查看当前所在的分支</td>
-</tr>
-<tr>
-<td> $ git stash list</td>
-<td>查看被储存的工作区列表</td>
-</tr>
-<tr>
-<td> $ git remote -v</td>
-<td>查看远程库的[详细]信息</td>
-</tr>
-<tr>
-<td> $ git tag</td>
-<td>查看所有标签</td>
-</tr>
-<tr>
-<td> $ git show <tagname></tagname></td>
-<td>查看某一个标签的信息</td>
-</tr>
-</tbody>
-</table>
-<h2 id="版本设置"><a href="#版本设置" class="headerlink" title="版本设置"></a>版本设置</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git reset –hard HEAD^</td>
-<td>HEAD为当前版本，每一个”^”代表上一个版本。HEAD~n代表上n个版本</td>
-</tr>
-<tr>
-<td> $ git reset –hard commitId</td>
-<td>将当前版本设置到版本号为“commitId”的版本</td>
-</tr>
-</tbody>
-</table>
-<h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git checkout – fileName</td>
-<td>使工作区文件撤销到(暂存区或版本库)的状态</td>
-</tr>
-<tr>
-<td> $ git reset HEAD fileName</td>
-<td>使暂存区的文件撤销到版本库的状态</td>
-</tr>
-</tbody>
-</table>
-<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ ssh-keygen -t rsa -C “email@example.com”</td>
-<td>获取ssh key</td>
-</tr>
-<tr>
-<td> $ git remote add origin git@serverName:path/repoName.git</td>
-<td>关联远程库</td>
-</tr>
-<tr>
-<td> $ git remote rm origin</td>
-<td>删除origin远程库</td>
-</tr>
-<tr>
-<td> $ git push -u origin master</td>
-<td>第一次推送master分支的所有内容</td>
-</tr>
-<tr>
-<td> $ git push origin master</td>
-<td>推送最新修改</td>
-</tr>
-<tr>
-<td> $ git clone git@serverName:path/repoName.git</td>
-<td>克隆远程仓库到本地</td>
-</tr>
-<tr>
-<td> $ git push origin master</td>
-<td>把本地的master分支推送到远程origin分支上</td>
-</tr>
-</tbody>
-</table>
-<h2 id="创建-合并-删除分支"><a href="#创建-合并-删除分支" class="headerlink" title="创建/合并/删除分支"></a>创建/合并/删除分支</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git checkout -b dev origin/dev</td>
-<td>创建一个dev分支，并关联远程的orgin/dev分支</td>
-</tr>
-<tr>
-<td> $ git branch –set-upstream dev origin/dev</td>
-<td>设置本地dev于远程仓库origin/dev关联</td>
-</tr>
-<tr>
-<td> $ git pull</td>
-<td>将本地文件与远程仓库同步</td>
-</tr>
-<tr>
-<td> $ git checkout -b dev</td>
-<td>创建并切换到分支dev</td>
-</tr>
-<tr>
-<td> $ git branch dev</td>
-<td>创建分支dev</td>
-</tr>
-<tr>
-<td> $ git checkout dev</td>
-<td>切换到分支dev</td>
-</tr>
-<tr>
-<td> $ git merge dev</td>
-<td>把分支dev合并到当前分支</td>
-</tr>
-<tr>
-<td> $ git branch -d dev</td>
-<td>删除已被合并的分支dev</td>
-</tr>
-<tr>
-<td> $ git branch -D dev</td>
-<td>强制删除未合并的分支dev</td>
-</tr>
-<tr>
-<td> $ git merge –no-ff -m “some comments” dev</td>
-<td>以创建一个commit的方式合并dev分支</td>
-</tr>
-</tbody>
-</table>
-<h2 id="工作区临时储存-恢复"><a href="#工作区临时储存-恢复" class="headerlink" title="工作区临时储存/恢复"></a>工作区临时储存/恢复</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git stash</td>
-<td>储存当前工作区状态，并清空</td>
-</tr>
-<tr>
-<td> $ git stash apply [stash@{n}]</td>
-<td>恢复上一个被储存的工作区 [第n个储存的工作区]</td>
-</tr>
-<tr>
-<td> $ git stash drop</td>
-<td>删除stash list</td>
-</tr>
-<tr>
-<td> $ git stash pop</td>
-<td>恢复工作区，并删除stash list</td>
-</tr>
-</tbody>
-</table>
-<h2 id="标签创建-删除"><a href="#标签创建-删除" class="headerlink" title="标签创建/删除"></a>标签创建/删除</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git tag v1.0 [commit Id]</td>
-<td>为当前最新的提交创建名为v1.0的标签 [对给定提交id创建]</td>
-</tr>
-<tr>
-<td> $ git tag -a v0.1 -m “some comments” commitId</td>
-<td>-a指定名字，-m指定说明文字</td>
-</tr>
-<tr>
-<td> $ git tag -d v0.1</td>
-<td>删除名为v0.1的标签</td>
-</tr>
-<tr>
-<td> $ git push origin <tagname></tagname></td>
-<td>将tagName标签推送到远程</td>
-</tr>
-<tr>
-<td> $ git push origin –tags</td>
-<td>将所有未推送的标签推送到远程</td>
-</tr>
-<tr>
-<td> $ git push origin :refs/tags/v0.9</td>
-<td>删除远程名为v0.9的标签</td>
-</tr>
-</tbody>
-</table>
-<h2 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h2><table>
-<thead>
-<tr>
-<th>command</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> $ git config –global color.ui true</td>
-<td>显示颜色</td>
-</tr>
-</tbody>
-</table>
-
-          
+          <p>用作记录，方便查阅<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/28/git学习笔记/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -901,8 +553,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-09-27T20:39:00+08:00">
-                2017-09-27
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T18:07:41+08:00">
+                2017-10-26
               </time>
             
           </span>
@@ -936,9 +588,7 @@
 
       
         
-          
-            
-<?xml version="1.0" encoding="utf-8"?>
+          <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
@@ -1074,502 +724,14 @@ for the JavaScript code in this tag.
 </script>
 </head>
 <body>
-<div id="content">
-<div id="table-of-contents">
-<h1>Table of Contents</h1>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#sec-1">1. Starting</a></li>
-<li><a href="#sec-2">2. Running and stopping</a></li>
-<li><a href="#sec-3">3. Breakpoints</a></li>
-<li><a href="#sec-4">4. Execution</a></li>
-<li><a href="#sec-5">5. Examining code</a></li>
-<li><a href="#sec-6">6. Examining data</a></li>
-<li><a href="#sec-7">7. Useful information</a></li>
-</ul>
-</div>
-</div>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">Command</td>
-<td class="left">Effect</td>
-</tr>
-</tbody>
-</table>
-<div id="outline-container-sec-1" class="outline-1">
-<h1 id="sec-1"><span class="section-number-1">1</span> Starting</h1>
-<div class="outline-text-1" id="text-1">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">gdb</td>
-<td class="left">&#xa0;</td>
-</tr>
-
-<tr>
-<td class="left">gdb &lt;file&gt;</td>
-<td class="left">&#xa0;</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div id="outline-container-sec-2" class="outline-1">
-<h1 id="sec-2"><span class="section-number-1">2</span> Running and stopping</h1>
-<div class="outline-text-1" id="text-2">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">quit</td>
-<td class="left">Exit gdb</td>
-</tr>
-
-<tr>
-<td class="left">run</td>
-<td class="left">Run program</td>
-</tr>
-
-<tr>
-<td class="left">run 1 2 3</td>
-<td class="left">Run program with command-line arguments 1 2 3</td>
-</tr>
-
-<tr>
-<td class="left">kill</td>
-<td class="left">Stop the program</td>
-</tr>
-
-<tr>
-<td class="left">quit</td>
-<td class="left">Exit gdb</td>
-</tr>
-
-<tr>
-<td class="left">Ctrl-d</td>
-<td class="left">Exit gdb</td>
-</tr>
-</tbody>
-</table>
-<p>
-Note: Ctrl-C does not exit from gdb, but halts the current
-gdb command
-</p>
-</div>
-</div>
-<div id="outline-container-sec-3" class="outline-1">
-<h1 id="sec-3"><span class="section-number-1">3</span> Breakpoints</h1>
-<div class="outline-text-1" id="text-3">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">break sum</td>
-<td class="left">Set breakpoint at the entry to function sum</td>
-</tr>
-
-<tr>
-<td class="left">break *0x80483c3</td>
-<td class="left">Set breakpoint at address 0x80483c3</td>
-</tr>
-
-<tr>
-<td class="left">delete 1</td>
-<td class="left">Delete breakpoint 1</td>
-</tr>
-
-<tr>
-<td class="left">disable 1</td>
-<td class="left">Delete breakpoint 1</td>
-</tr>
-
-<tr>
-<td class="left">enable 1</td>
-<td class="left">Enable breakpoint 1</td>
-</tr>
-
-<tr>
-<td class="left">delete</td>
-<td class="left">Delete all breakpoints</td>
-</tr>
-
-<tr>
-<td class="left">clear sum</td>
-<td class="left">clear sum</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div id="outline-container-sec-4" class="outline-1">
-<h1 id="sec-4"><span class="section-number-1">4</span> Execution</h1>
-<div class="outline-text-1" id="text-4">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">stepi</td>
-<td class="left">Execute one instruction</td>
-</tr>
-
-<tr>
-<td class="left">stepi 4</td>
-<td class="left">Execute four instructions</td>
-</tr>
-
-<tr>
-<td class="left">nexti</td>
-<td class="left">Like stepi, but proceed through function calls without stopping</td>
-</tr>
-
-<tr>
-<td class="left">step</td>
-<td class="left">Execute one C statement</td>
-</tr>
-
-<tr>
-<td class="left">continue</td>
-<td class="left">Resume execution until the next breakpoint</td>
-</tr>
-
-<tr>
-<td class="left">until 3</td>
-<td class="left">Continue executing until program hits breakpoint 3</td>
-</tr>
-
-<tr>
-<td class="left">finish</td>
-<td class="left">Resume execution until current function returns</td>
-</tr>
-
-<tr>
-<td class="left">call sum(1,2)</td>
-<td class="left">Call sum(1,2) and print return value</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div id="outline-container-sec-5" class="outline-1">
-<h1 id="sec-5"><span class="section-number-1">5</span> Examining code</h1>
-<div class="outline-text-1" id="text-5">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">disas</td>
-<td class="left">Disassemble current function</td>
-</tr>
-
-<tr>
-<td class="left">disas sum</td>
-<td class="left">Disassemble function sum</td>
-</tr>
-
-<tr>
-<td class="left">disas 0x80483b7</td>
-<td class="left">Disassemble function around 0x80483b7</td>
-</tr>
-
-<tr>
-<td class="left">disas 0x80483b7 0x80483c7</td>
-<td class="left">Disassemble code within specified address range</td>
-</tr>
-
-<tr>
-<td class="left">print /x $rip</td>
-<td class="left">Print program counter in hex</td>
-</tr>
-
-<tr>
-<td class="left">print /d $rip</td>
-<td class="left">Print program counter in decimal</td>
-</tr>
-
-<tr>
-<td class="left">print /t $rip</td>
-<td class="left">Print program counter in binary</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<div id="outline-container-sec-6" class="outline-1">
-<h1 id="sec-6"><span class="section-number-1">6</span> Examining data</h1>
-<div class="outline-text-1" id="text-6">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">print /d $rax</td>
-<td class="left">Print contents of %rax in decimal</td>
-</tr>
-
-<tr>
-<td class="left">print /x $rax</td>
-<td class="left">Print contents of %rax in hex</td>
-</tr>
-
-<tr>
-<td class="left">print /t $rax</td>
-<td class="left">Print contents of %rax in binary</td>
-</tr>
-
-<tr>
-<td class="left">print /d (int)$rax</td>
-<td class="left">Print contents of %rax in decimal after sign-extending lower 32-bits.</td>
-</tr>
-</tbody>
-</table>
-<p>
-You need this to print 32-bit, negative numbers stored in the lower 32 bits of %rax.
-For example, if the lower 32-bits of %rax store 0xffffffff, you will see: 
-</p>
-<pre class="example">
-(gdb) print $rax
-$1 = 4294967295
-(gdb) print (int)$rax
-$2 = -1
-</pre>
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">print 0x100</td>
-<td class="left">Print decimal representation of 0x100</td>
-</tr>
-
-<tr>
-<td class="left">print /x 555</td>
-<td class="left">Print hex representation of 555</td>
-</tr>
-
-<tr>
-<td class="left">print /x ($rsp+8)</td>
-<td class="left">Print (contents of %rsp) + 8 in hex</td>
-</tr>
-
-<tr>
-<td class="left">print *(int *) 0xbffff890</td>
-<td class="left">Print integer at address 0xbffff890</td>
-</tr>
-
-<tr>
-<td class="left">print *(int *) ($rsp+8)</td>
-<td class="left">Print integer at address %rsp + 8</td>
-</tr>
-
-<tr>
-<td class="left">print (char *) 0xbfff890</td>
-<td class="left">Examine a string stored at 0xbffff890</td>
-</tr>
-
-<tr>
-<td class="left">x/w   0xbffff890</td>
-<td class="left">Examine (4-byte) word starting at address 0xbffff890</td>
-</tr>
-
-<tr>
-<td class="left">x/w   $rsp</td>
-<td class="left">Examine (4-byte) word starting at address in $rsp</td>
-</tr>
-
-<tr>
-<td class="left">x/wd  $rsp</td>
-<td class="left">Examine (4-byte) word starting at address in $rsp. Print in decimal</td>
-</tr>
-
-<tr>
-<td class="left">x/2w  $rsp</td>
-<td class="left">Examine two (4-byte) words starting at address in $rsp</td>
-</tr>
-
-<tr>
-<td class="left">x/2wd $rsp</td>
-<td class="left">Examine two (4-byte) words starting at address in $rsp. Print in decimal</td>
-</tr>
-
-<tr>
-<td class="left">x/g   $rsp</td>
-<td class="left">Examine (8-byte) word starting at address in $rsp.</td>
-</tr>
-
-<tr>
-<td class="left">x/gd  $rsp</td>
-<td class="left">Examine (8-byte) word starting at address in $rsp. Print in decimal</td>
-</tr>
-
-<tr>
-<td class="left">x/a   $rsp</td>
-<td class="left">Examine address in $rsp. Print as offset from previous global symbol.</td>
-</tr>
-
-<tr>
-<td class="left">x/s   0xbffff890</td>
-<td class="left">Examine a string stored at 0xbffff890</td>
-</tr>
-
-<tr>
-<td class="left">x/20b sum</td>
-<td class="left">Examine first 20 opcode bytes of function sum</td>
-</tr>
-
-<tr>
-<td class="left">x/10i sum</td>
-<td class="left">Examine first 10 instructions of function sum</td>
-</tr>
-</tbody>
-</table>
-<p>
-(Note: the format string for the `x' command has the general form x/[NUM][SIZE][FORMAT] where
-</p>
-<pre class="example">
-NUM  = number of objects to display.
-SIZE = size of each object (b=byte, h=half-word, w=word, g=giant (quad-word))
-FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
-</pre>
-<p>
-  If you don't specify SIZE or FORMAT, either a default value, or the last
-  value you specified in a previous `print' or `x' command is used.
-)
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-7" class="outline-1">
-<h1 id="sec-7"><span class="section-number-1">7</span> Useful information</h1>
-<div class="outline-text-1" id="text-7">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col class="left">
-
-<col class="left">
-</colgroup>
-<tbody>
-<tr>
-<td class="left">backtrace</td>
-<td class="left">Print the current address and stack backtrace</td>
-</tr>
-
-<tr>
-<td class="left">where</td>
-<td class="left">Print the current address and stack backtrace</td>
-</tr>
-
-<tr>
-<td class="left">info program</td>
-<td class="left">Print current status of the program)</td>
-</tr>
-
-<tr>
-<td class="left">info functions</td>
-<td class="left">Print functions in program</td>
-</tr>
-
-<tr>
-<td class="left">info stack</td>
-<td class="left">Print backtrace of the stack)</td>
-</tr>
-
-<tr>
-<td class="left">info frame</td>
-<td class="left">Print information about the current stack frame</td>
-</tr>
-
-<tr>
-<td class="left">info registers</td>
-<td class="left">Print registers and their contents</td>
-</tr>
-
-<tr>
-<td class="left">info breakpoints</td>
-<td class="left">Print status of user-settable breakpoints</td>
-</tr>
-
-<tr>
-<td class="left">display /FMT EXPR</td>
-<td class="left">Print expression EXPR using format FMT every time GDB stops</td>
-</tr>
-
-<tr>
-<td class="left">undisplay</td>
-<td class="left">Turn off display mode</td>
-</tr>
-
-<tr>
-<td class="left">help</td>
-<td class="left">Get information about gdb</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div id="postamble" class="status">
-<p class="creator"><a href="http://www.gnu.org/software/emacs/" target="_blank" rel="external">Emacs</a> 24.5.1 (<a href="http://orgmode.org" target="_blank" rel="external">Org</a> mode 8.2.10)</p>
-<p class="validation"><a href="http://validator.w3.org/check?uri=referer" target="_blank" rel="external">Validate</a></p>
-</div>
-</body>
-</html>
-
-          
+<p>用作记录，方便查阅</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/27/GDB常用命令汇总/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1663,8 +825,8 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-10-22T22:45:19+08:00">
-                2017-10-22
+              <time title="更新于" itemprop="dateModified" datetime="2017-10-26T18:09:11+08:00">
+                2017-10-26
               </time>
             
           </span>
@@ -1698,168 +860,14 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
 
       
         
-          
-            <h2 id="文本文件在windows和linux之间的相互转换"><a href="#文本文件在windows和linux之间的相互转换" class="headerlink" title="文本文件在windows和linux之间的相互转换"></a>文本文件在windows和linux之间的相互转换</h2><p>差异：windows下的文本文件的编码方式默认采用的是GBK，而linux默认采用utf-8，因此同一文件在两种操作系统下可能会出现中文乱码的现象。另外，windows文件的换行符为’/r/n’，而linux文件则为’/n’，也会导致一系列奇怪问题的产生。</p>
-<p>windows -&gt; linux: 多出来的 <strong>/r</strong> 文件换行符在vi下以 <strong>^M</strong> 的形式呈现。</p>
-<ul>
-<li><p>移除 <strong>^M</strong>: <code>sed -i &#39;s/^M//g&#39; fileName</code></p>
-<blockquote>
-<p><strong>-i</strong>  : 直接修改文件内容，不输出<br><strong>s</strong>  : 取代<br><strong>^M</strong> : 通过ctrl+v ctrl+m 输入<br><strong>g</strong>  : 应用于全局<br>‘s/匹配文本/替换文本/g’</p>
-</blockquote>
-</li>
-<li><p>添加<strong>^M</strong>: <code>sed -i &#39;s/$/^M/g&#39; fileName</code></p>
-<blockquote>
-<p><strong>$</strong>: 匹配行末</p>
-</blockquote>
-</li>
-<li><p>转换编码方式: <code>iconv -f gbk -t utf8 fileName &gt; newFileName</code></p>
-<blockquote>
-<p><strong>-f</strong>: from<br> <strong>-t</strong>: to</p>
-</blockquote>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2017/09/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="tangenta">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Road to PI/2">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/hello-world/" itemprop="url">Hello World</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T20:43:01+08:00">
-                2017-09-23
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2017-09-23T20:43:01+08:00">
-                2017-09-23
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
+          <p>记录常用linux命令<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/24/Linux命令实例（长期更新）/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1938,8 +946,8 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
-                <span class="site-state-item-count">5</span>
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1951,25 +959,42 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
             
             
             <div class="site-state-item site-state-tags">
-              
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
         </nav>
 
         
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
-        
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tangenta" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://gitee.com/tangenta" target="_blank" title="Gitee">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Gitee
+                    
+                </a>
+              </span>
+            
           
         </div>
 
@@ -1977,24 +1002,6 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
         
 
         
-        
-          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
-            <div class="links-of-blogroll-title">
-              <i class="fa  fa-fw fa-globe"></i>
-              
-            </div>
-            <ul class="links-of-blogroll-list">
-              
-                <li class="links-of-blogroll-item">
-                  <a href="/atom.xml" title="Feed" target="_blank">Feed</a>
-                </li>
-              
-                <li class="links-of-blogroll-item">
-                  <a href="/sitemap.xml" title="SiteMap" target="_blank">SiteMap</a>
-                </li>
-              
-            </ul>
-          </div>
         
 
         
@@ -2039,7 +1046,7 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Pisces
   </a>
 </div>
 
@@ -2113,6 +1120,13 @@ FORMAT = how to display each object (d=decimal, x=hex, o=octal, etc.)
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
 
   
     <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
