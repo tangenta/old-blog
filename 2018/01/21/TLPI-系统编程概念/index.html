@@ -52,7 +52,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="linux,TLPI," />
 
 
 
@@ -69,6 +69,7 @@
 
 
 <meta name="description" content="system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。">
+<meta name="keywords" content="linux,TLPI">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TLPI-系统编程概念">
 <meta property="og:url" content="tangenta.github.io/2018/01/21/TLPI-系统编程概念/index.html">
@@ -78,7 +79,7 @@
 <meta property="og:image" content="/images/systemconcept-close-error.png">
 <meta property="og:image" content="/images/systemconcept-perror.png">
 <meta property="og:image" content="/images/systemconcept-strerror.png">
-<meta property="og:updated_time" content="2018-01-24T09:52:24.737Z">
+<meta property="og:updated_time" content="2018-01-24T09:59:53.673Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TLPI-系统编程概念">
 <meta name="twitter:description" content="system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。">
@@ -279,7 +280,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-21T11:15:52+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-21T11:15:00+08:00">
                 2018-01-21
               </time>
             
@@ -295,7 +296,7 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-01-24T17:52:24+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-24T17:59:53+08:00">
                 2018-01-24
               </time>
             
@@ -393,7 +394,7 @@
 <p>  可以通过<code>#define xxx</code>或者在编译选项加上<code>-D xxx</code>，让程序得以在遵循这些标准的系统上正常运行。</p>
 </li>
 <li><p>系统数据类型(system data type)</p>
-<p>  我们常常可以看到一些typedef，例如size_t，pid_t等等，应用这些数据类型而非直接使用C语言中的int，long的原因就是能够提高可移植性。例如存放进程ID，有些系统需要4个字节的空间，另一些则用8个字节。我们写程序时可以用pid_t来消除用int还是long的麻烦。</p>
+<p>  我们常常可以看到一些typedef，例如size_t，pid_t等等，应用这些数据类型而非直接使用C语言中的int，long的原因就是能够提高可移植性。例如存放进程ID，有些系统需要4个字节的空间，另一些则用8个字节。我们写程序时可以用pid_t来消除“用int还是long”的麻烦。</p>
 <p>  用printf输出这些数据类型时，由于程序在运行时无法得知“系统数据类型”对应的“C类型”，用”%d”还是用”%ld”就成了问题。一个解决方案是，对所有系统数据类型变量先强制转换为long，以”%ld”的形式输出。</p>
 </li>
 </ul>
@@ -442,6 +443,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/TLPI/" rel="tag"># TLPI</a>
+          
+        </div>
       
 
       
@@ -559,7 +568,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
