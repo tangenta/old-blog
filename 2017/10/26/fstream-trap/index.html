@@ -76,7 +76,7 @@
 <meta property="og:site_name" content="Road to PI&#x2F;2">
 <meta property="og:description" content="废话不多说，先出一道题：给定一个行数=3的文本文件，如何把每行的内容读出来存到std::vector里面？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-04T12:06:15.604Z">
+<meta property="og:updated_time" content="2018-01-13T10:51:37.062Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++读文件操作暗礁">
 <meta name="twitter:description" content="废话不多说，先出一道题：给定一个行数=3的文本文件，如何把每行的内容读出来存到std::vector里面？">
@@ -185,6 +185,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -266,7 +276,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T21:16:01+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T21:16:00+08:00">
                 2017-10-26
               </time>
             
@@ -282,8 +292,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-12-04T20:06:15+08:00">
-                2017-12-04
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-13T18:51:37+08:00">
+                2018-01-13
               </time>
             
           </span>
@@ -320,7 +330,9 @@
 <p>如果你的答案是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function">fstream <span class="title">in</span><span class="params">(<span class="string">"text"</span>)</span></span>;</div><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; v;</div><div class="line"><span class="built_in">string</span> buf;</div><div class="line"><span class="keyword">while</span>(in) &#123;</div><div class="line">  getline(in, buf);</div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>那么我掐指一算：<br>你最近是不是感觉到你写的文件读写程序，行为有点怪异？<br>是不是忍不住发出惊叹“明明读完了啊，怎么多一行“？<br>是不是把fstream里面有关good/eof/fail/bad的文档全看了一遍，还是找不到问题在哪？<br>是不是才爬个5楼，就觉得胸闷气短…<br>咳，回到正题：如果在最后加一句</p>
 <pre><code>cout&lt;&lt;v.size()&lt;&lt;&quot;\n&quot;;
-</code></pre><p>发现结果是4。分析一下原因：在in&gt;&gt;buf读取文件最后一行的时候，状态为goodbit，v.push_back正常读入最后一行;再次判断循环条件，由于goodbit，进入循环;这时in&gt;&gt;tmp就开始出问题了，它读到了文件结束符eof。然而我们的buf可不管，读不到东西也push_back，这就造成size比行数大1的结果。<br>总结起来一句话就是：<strong>“从文件读取到缓冲”和”从缓冲输入到容器”之间没有空隙，即无条件连接。</strong><br>显然，while的条件判断起作用的时机晚了。一个解决方案是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;<span class="comment">//solution1</span></div><div class="line">  <span class="built_in">cin</span>(in, buf);</div><div class="line">  <span class="keyword">if</span> (!in) <span class="keyword">break</span>;</div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>其等价于<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(getline(in, buf)) &#123;<span class="comment">//solution2</span></div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure><br>第二个解决方案也是C++中的惯用法(idiom)，更为简洁、美观。</p>
+</code></pre><p>发现结果是4。分析一下原因：在in&gt;&gt;buf读取文件最后一行的时候，状态为goodbit，v.push_back正常读入最后一行;再次判断循环条件，由于goodbit，进入循环;这时in&gt;&gt;tmp就开始出问题了，它读到了文件结束符eof。然而我们的buf可不管，读不到东西也push_back，这就造成size比行数大1的结果。<br>总结起来一句话就是：<strong>“从文件读取到缓冲”和”从缓冲输入到容器”之间没有空隙，即无条件连接。</strong><br>显然，while的条件判断起作用的时机晚了。一个解决方案是：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;<span class="comment">//solution1</span></div><div class="line">  getline(in, buf);</div><div class="line">  <span class="keyword">if</span> (!in) <span class="keyword">break</span>;</div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>其等价于<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(getline(in, buf)) &#123;<span class="comment">//solution2</span></div><div class="line">  v.push_back(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>第二个解决方案也是C++中的惯用法(idiom)，更为简洁、美观。</p>
 <pre><code>return;
 }
 </code></pre>
@@ -451,12 +463,21 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
@@ -464,7 +485,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -534,8 +555,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

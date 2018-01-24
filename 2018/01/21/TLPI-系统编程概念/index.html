@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TLPI-系统编程概念">
+<meta property="og:url" content="tangenta.github.io/2018/01/21/TLPI-系统编程概念/index.html">
+<meta property="og:site_name" content="Road to PI&#x2F;2">
+<meta property="og:description" content="system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/images/systemconcept-close-error.png">
+<meta property="og:image" content="/images/systemconcept-perror.png">
+<meta property="og:image" content="/images/systemconcept-strerror.png">
+<meta property="og:updated_time" content="2018-01-24T09:52:24.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TLPI-系统编程概念">
+<meta name="twitter:description" content="system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。">
+<meta name="twitter:image" content="/images/systemconcept-close-error.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="tangenta.github.io/2018/01/21/TLPI-系统编程概念/"/>
+
+
+
+
+
+  <title>TLPI-系统编程概念 | Road to PI/2</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Road to PI/2</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2018/01/21/TLPI-系统编程概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tangenta">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Road to PI/2">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">TLPI-系统编程概念</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-21T11:15:52+08:00">
+                2018-01-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-24T17:52:24+08:00">
+                2018-01-24
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>system programming concepts…这一章的名字起得不好，明明只介绍了系统/库函数，相应的错误处理和可移植性问题。。</p>
+<a id="more"></a>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>系统函数（system call）是进程向内核请求服务的入口，是系统编程的接口（API）。内核提供各种各样的服务，例如创建新进程、实行IO操作、进程间通信等等。</p>
+<p>系统调用有如下特征：</p>
+<ul>
+<li>每次进行系统调用，都会将处理器的状态从“用户模式”转换为“内核模式”。</li>
+<li>系统函数的集合是固定的，每个系统函数都由独一无二的数字标识。</li>
+<li>每个系统函数原型都包含一个或多个形参。</li>
+</ul>
+<p>在C语言中，系统函数调用的过程：</p>
+<ol>
+<li>调用C函数库中的封装函数</li>
+<li>封装函数保证调用系统函数时对应参数位置的正确性</li>
+<li>调用系统函数前，封装函数将系统函数对应的数字赋值到寄存器eax中</li>
+<li>执行trap机器指令（0x80），导致程序计数器跳转到0x80，处理器模式也从用户模式转换为内核模式</li>
+<li>开始调用system_call()。它作出下列行为：<ul>
+<li>寄存器的值入栈。</li>
+<li>检验系统调用的合法性。</li>
+<li>根据sys_call_table找到并调用相应的系统函数。</li>
+<li>恢复寄存器值，系统函数的返回值入栈。</li>
+<li>返回到封装函数，切换模式。</li>
+</ul>
+</li>
+<li>系统调用被反应到全局变量errno，从封装函数返回</li>
+</ol>
+<p>[注] 通常情况下，调用系统函数的开销是普通函数的数十倍。</p>
+<h3 id="库函数"><a href="#库函数" class="headerlink" title="库函数"></a>库函数</h3><p>库函数是C标准库中的重要组成部分。其中既包括与系统函数无关的函数，例如字符串处理函数; 又有系统函数的封装器，例如fopen，printf，malloc，free等等——这类库函数通常为简化系统函数的使用而被设计出来。</p>
+<h3 id="系统-库函数的错误处理"><a href="#系统-库函数的错误处理" class="headerlink" title="系统/库函数的错误处理"></a>系统/库函数的错误处理</h3><p>除了测试返回值以外，多数系统函数在出现异常时会设置全局变量errno（通常与<code>&lt;errno.h&gt;</code>中定义的常量配合使用）。例如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cnt = read(fd, buf, numbytes);</div><div class="line"><span class="keyword">if</span> (cnt == <span class="number">-1</span>) &#123;</div><div class="line">	<span class="keyword">if</span> (errno == EINTR)</div><div class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"read was interrupted by a signal\n"</span>);</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">	<span class="comment">/* Some other error occurred */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>&lt;errno.h&gt;</code>中定义的所有表示错误的常量都以E开头。man手册中，每一个系统函数的ERRORS部分标注了所有可能产生的错误。例如close(int fd)：</p>
+<p><img src="/images/systemconcept-close-error.png" alt="upload successful"></p>
+<p>[注意] errno表示<strong>上一次</strong>错误的数字代号。也就是说，如果系统调用正常返回，它不会对errno进行重设。因此，在使用errno之前，都应当先检查返回值。<br>此外，还有一种常见的错误使用errno的情况：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (somecall() == <span class="number">-1</span>) &#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"somacall() failed\n"</span>);</div><div class="line">    <span class="keyword">if</span> (errno == ...) &#123;...&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>错误之处在于printf可能会重设errno。用C++的话来说，这不是异常安全的。<br>正确写法是第一步先保存errno的值。</p>
+<p>[注意] 不要手动声明errno(即<code>extern int errno;</code>)，而应该使用<code>#include &lt;errno.h&gt;</code>的方式声明。</p>
+<h4 id="perror"><a href="#perror" class="headerlink" title="perror()"></a>perror()</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">perror</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> * msg )</span></span>;</div></pre></td></tr></table></figure>
+<p>输出字符串msg和errno对应的描述到标准错误流上。</p>
+<p><img src="/images/systemconcept-perror.png" alt="upload successful"></p>
+<h4 id="strerror"><a href="#strerror" class="headerlink" title="strerror()"></a>strerror()</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">strerror</span><span class="params">(<span class="keyword">int</span> errnum )</span></span>;</div><div class="line"></div><div class="line"><span class="comment">// Returns pointer to error string corresponding to errnum</span></div></pre></td></tr></table></figure>
+<p>遇到未知错误代码时，返回的字符串为“unknown error nnn”。但在一些strerror实现中，也有可能是NULL。</p>
+<p><img src="/images/systemconcept-strerror.png" alt="upload successful"></p>
+<p>[注意] 部分库函数遇到错误不会设置errno，这种情况下，不应使用perror()或strerror()来检查错误。</p>
+<h3 id="常用头文件和错误处理函数"><a href="#常用头文件和错误处理函数" class="headerlink" title="常用头文件和错误处理函数"></a>常用头文件和错误处理函数</h3><p>perror和strerror功能分别是输出错误信息和翻译错误码，但在linux系统编程中仅仅有这两个是不够方便的。下面给出几个实用的错误报告函数（它们的实现在这里：<a href="https://gitee.com/tangenta/TLPI-study-notes/blob/master/tlpi_hdr.h" target="_blank" rel="external">tlpi-hdr.h</a>）：</p>
+<ul>
+<li><strong><code>void errMsg(const char* format, ...)</code></strong>： 有格式控制输出的perror()</li>
+<li><strong><code>void errExit(const char* format, ...)</code></strong>： errMsg后退出程序</li>
+<li><strong><code>void err_exit(const char* format, ...)</code></strong>： 类似errExit，退出时<strong>不刷新</strong>stdout缓冲区</li>
+<li><strong><code>void errExitEN(int errnum, const char* format, ...)</code></strong>： 用errnum代替errno的errExit(多线程中，errno是函数调用，使用errExitEN()有利于提高效率)</li>
+<li><strong><code>void fatal(const char* format, ...)</code></strong>： 用来诊断通用错误（即包括不会设置errno的错误），<strong>不使用</strong>errno，采用errExit退出程序。</li>
+<li><strong><code>void usageErr(const char* format, ...)</code></strong>： 字符串前置”Usage:”</li>
+<li><strong><code>void cmdLineErr(const char* format, ...)</code></strong>： 用于表示命令行参数错误</li>
+</ul>
+<p>下面是命令行解析函数（分别是int和long）：</p>
+<ul>
+<li><strong><code>int getInt(const char* arg , int flags , const char* name)</code></strong></li>
+<li><strong><code>long getLong(const char* arg , int flags , const char* name)</code></strong></li>
+</ul>
+<p>如果arg指向的字符串不能被转换为整数，则报错并终止程序。</p>
+<p>flag可以设定<strong>大小</strong>——非负(GN_NONNEG)、正(GN_GT_0)和<strong>进制</strong>——任意进制(GN_ANY_BASE)、八进制(GN_BASE_8)、十六进制(GN_BASE_16)。大小和进制可以用或（|）来同时设定。</p>
+<p>name可以自己设定，输出结果以…(in <em>name</em>)…显示。</p>
+<h3 id="可移植性"><a href="#可移植性" class="headerlink" title="可移植性"></a>可移植性</h3><ul>
+<li><p>特性检测宏(feature test macros)</p>
+<p>  由于不同的标准主导了系统函数和库函数的API，要使程序具有可移植性，就要做到在头文件中只暴露某些平台相关的定义。</p>
+<p>  可以通过<code>#define xxx</code>或者在编译选项加上<code>-D xxx</code>，让程序得以在遵循这些标准的系统上正常运行。</p>
+</li>
+<li><p>系统数据类型(system data type)</p>
+<p>  我们常常可以看到一些typedef，例如size_t，pid_t等等，应用这些数据类型而非直接使用C语言中的int，long的原因就是能够提高可移植性。例如存放进程ID，有些系统需要4个字节的空间，另一些则用8个字节。我们写程序时可以用pid_t来消除用int还是long的麻烦。</p>
+<p>  用printf输出这些数据类型时，由于程序在运行时无法得知“系统数据类型”对应的“C类型”，用”%d”还是用”%ld”就成了问题。一个解决方案是，对所有系统数据类型变量先强制转换为long，以”%ld”的形式输出。</p>
+</li>
+</ul>
+<ul>
+<li><p>结构体</p>
+<p>  一些标准中的部分结构体没有指定内部成员的相对次序。在初始化时，为了提高可移植性，不应使用 <code>struct somestruct s = {a1, a2, a3}</code> 这种形式，而应显式初始化。</p>
+</li>
+</ul>
+<ul>
+<li><p>非通用的宏</p>
+<p>  有些宏不是在所有实现都有定义。使用它们的时候应用<code>#ifdef xxx</code>包裹起来。</p>
+</li>
+<li><p>头文件</p>
+<p>  同一个定义在不同的标准下，可能会位于不同的头文件中。为了尽可能提高可移植性，可以考虑包含多个标准指定的头文件。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    tangenta
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="tangenta.github.io/2018/01/21/TLPI-系统编程概念/" title="TLPI-系统编程概念">tangenta.github.io/2018/01/21/TLPI-系统编程概念/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/26/gdb-trick/" rel="next" title="GDB奇技淫巧">
+                <i class="fa fa-chevron-left"></i> GDB奇技淫巧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tangenta" />
+          <p class="site-author-name" itemprop="name">tangenta</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tangenta" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://gitee.com/tangenta" target="_blank" title="Gitee">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Gitee
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用"><span class="nav-text">系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#库函数"><span class="nav-text">库函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统-库函数的错误处理"><span class="nav-text">系统/库函数的错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#perror"><span class="nav-text">perror()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#strerror"><span class="nav-text">strerror()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用头文件和错误处理函数"><span class="nav-text">常用头文件和错误处理函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可移植性"><span class="nav-text">可移植性</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tangenta</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

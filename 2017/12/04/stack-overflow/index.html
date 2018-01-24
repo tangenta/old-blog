@@ -52,7 +52,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="杂谈," />
+  <meta name="keywords" content="栈溢出," />
 
 
 
@@ -69,7 +69,7 @@
 
 
 <meta name="description" content="前几天沉迷于栈溢出，写篇文章记录一下。在此首先给CSAPP的作者Randal E. Bryant和David R. O’Hallaron献上我的膝盖，然后再给这本书的配套网站和里面的实验室献上。。没有膝盖了，就点个赞吧。">
-<meta name="keywords" content="杂谈">
+<meta name="keywords" content="栈溢出">
 <meta property="og:type" content="article">
 <meta property="og:title" content="真·「stack_overflow」">
 <meta property="og:url" content="tangenta.github.io/2017/12/04/stack-overflow/index.html">
@@ -88,11 +88,10 @@
 <meta property="og:image" content="/2017/12/04/stack-overflow/stringAddr.png">
 <meta property="og:image" content="/2017/12/04/stack-overflow/machineCode.png">
 <meta property="og:image" content="/2017/12/04/stack-overflow/finish1.png">
-<meta property="og:image" content="/2017/12/04/stack-overflow/fakeEnd.png">
 <meta property="og:image" content="/2017/12/04/stack-overflow/stack-randomization.png">
 <meta property="og:image" content="/2017/12/04/stack-overflow/nop-sled.png">
 <meta property="og:image" content="/2017/12/04/stack-overflow/memory.png">
-<meta property="og:updated_time" content="2017-12-13T11:06:26.809Z">
+<meta property="og:updated_time" content="2018-01-13T10:52:22.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="真·「stack_overflow」">
 <meta name="twitter:description" content="前几天沉迷于栈溢出，写篇文章记录一下。在此首先给CSAPP的作者Randal E. Bryant和David R. O’Hallaron献上我的膝盖，然后再给这本书的配套网站和里面的实验室献上。。没有膝盖了，就点个赞吧。">
@@ -202,6 +201,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -283,7 +292,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-04T20:09:07+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-04T20:09:00+08:00">
                 2017-12-04
               </time>
             
@@ -299,8 +308,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2017-12-13T19:06:26+08:00">
-                2017-12-13
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-13T18:52:22+08:00">
+                2018-01-13
               </time>
             
           </span>
@@ -334,6 +343,16 @@
 
       
         <p>前几天沉迷于栈溢出，写篇文章记录一下。在此首先给CSAPP的作者Randal E. Bryant和David R. O’Hallaron献上我的膝盖，然后再给这本书的<a href="http://csapp.cs.cmu.edu/2e/home.html" target="_blank" rel="external">配套网站</a>和里面的<a href="http://csapp.cs.cmu.edu/2e/labs.html" target="_blank" rel="external">实验室</a>献上。。没有膝盖了，就点个赞吧。<br><a id="more"></a></p>
+<hr>
+<p>2018.01.13更新：初次实践，玩溢出的时候走了一些弯路：比如肉眼看内存状况，以及注入冗余代码等等。关于注入代码中的函数调用模拟：</p>
+<blockquote>
+<p>模拟函数调用是必要的：由于程序不知道我们修改了返回地址，在执行注入代码时，框架指针和栈指针和test的是一样的(认为我们已经返回到了test中)。如果要让<strong>注入代码</strong>的ret正常返回到test中，在ret之前就需要让栈的状态和getbuf的栈状态相同。如何做到相同？模拟getbuf的函数调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">movl $0x1005b2b7,%eax</div><div class="line">pushl $0x8048dbe</div><div class="line">pushl %ebp</div><div class="line">movl %esp,%ebp</div><div class="line">subl $0x38,%esp</div><div class="line">leave</div><div class="line">ret</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>这段说法存在问题。从代码分析可以发现，用于建立新函数栈的第3-5行可以和用于回收函数栈的第6行相互抵消。而ret的作用仅仅是pop返回地址+程序跳转，除了sp++之外，没有对栈结构造成其他影响。因此也没有“程序认为我们已经返回到了test中”这种说法。。</p>
+<p>归根结底，还是对汇编指令与栈结构之间的联系理解得不够深刻。</p>
+<hr>
+<p>————原文分割线————</p>
+<hr>
 <p>栈溢出攻击：对于读入字符串时没有边界检查的程序，利用字符串不断写入信息覆盖返回值，使程序计数器跳转到指定位置，执行特定代码的行为。</p>
 <p>下面是一个栗子(代码和图片都来自CSAPP)：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">gets</span><span class="params">(<span class="keyword">char</span> *s)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> c;</div><div class="line">	<span class="keyword">char</span> *dest = s;</div><div class="line">	<span class="keyword">int</span> gotchar = <span class="number">0</span>; <span class="comment">/* Has at least one character been read? */</span></div><div class="line">	<span class="keyword">while</span> ((c = getchar()) != ’\n’ &amp;&amp; c != EOF) &#123;</div><div class="line">	*dest++ = c; <span class="comment">/* No bounds checking! */</span></div><div class="line">	gotchar = <span class="number">1</span>;</div><div class="line">	&#125;</div><div class="line">	*dest++ = ’\<span class="number">0</span>’; <span class="comment">/* Terminate string */</span></div><div class="line">	<span class="keyword">if</span> (c == EOF &amp;&amp; !gotchar)</div><div class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">/* End of file or error */</span></div><div class="line">	<span class="keyword">return</span> s;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* Read input line and write it back */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">echo</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span> buf[<span class="number">8</span>]; <span class="comment">/* Way too small! */</span></div><div class="line">	gets(buf);</div><div class="line">	<span class="built_in">puts</span>(buf);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>代码经过gcc -m32编译过后产生一个在IA32处理器上运行的程序。<br>下图为程序执行到echo函数中的gets(buf)时的内存结构，地址数值从上往下递减。寄存器%ebp是echo的框架指针，并且白色矩形从上至下依次为：</p>
@@ -347,8 +366,8 @@
 <p><img src="/2017/12/04/stack-overflow/fakeEnd.png" width="100%" height="100%"></p>
 <p><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></p>
 <p>。。<br><br></p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><br></h2><p>到此为止是不可能到此的，这辈子都不可能到此为止，上面只是一个复习而已啦。下面开始进入正题：挽起袖子动手实现栈溢出。<br>原料：CSAPP实验室提供的bufbomb一枚，可以在Buffer Lab的Self-study Handout获得。<br>工具：gdb，objdump，gcc和脑子。</p>
-<p>依题意得，该程序会调用下面的test函数：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	<span class="comment">/* Put canary on stack to detect possible corruption */</span></div><div class="line">	<span class="keyword">volatile</span> <span class="keyword">int</span> local = uniqueval();</div><div class="line">	val = getbuf();</div><div class="line">	<span class="comment">/* Check for corrupted stack */</span></div><div class="line">	<span class="keyword">if</span> (local != uniqueval()) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Sabotaged!: the stack has been corrupted\n"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (val == cookie) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Boom!: getbuf returned 0x%x\n"</span>, val);</div><div class="line">		validate(<span class="number">3</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Dud: getbuf returned 0x%x\n"</span>, val);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"> <span class="comment">/* Buffer size for getbuf */</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> NORMAL_BUFFER_SIZE 32</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getbuf</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span> buf[NORMAL_BUFFER_SIZE];</div><div class="line">	Gets(buf);</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>到此为止是不可能到此的，这辈子都不可能到此为止，上面只是一个复习而已啦。下面开始进入正题：挽起袖子动手实现栈溢出。<br>原料：CSAPP实验室提供的bufbomb一枚，可以在Buffer Lab的Self-study Handout获得。<br>工具：gdb，objdump，gcc和脑子。</p>
+<p>依题意得，该程序会调用下面的test函数：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> val;</div><div class="line">	<span class="comment">/* Put canary on stack to detect possible corruption */</span></div><div class="line">	<span class="keyword">volatile</span> <span class="keyword">int</span> local = uniqueval();</div><div class="line">	val = getbuf();</div><div class="line">	<span class="comment">/* Check for corrupted stack */</span></div><div class="line">	<span class="keyword">if</span> (local != uniqueval()) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Sabotaged!: the stack has been corrupted\n"</span>);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (val == cookie) &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Boom!: getbuf returned 0x%x\n"</span>, val);</div><div class="line">		validate(<span class="number">3</span>);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		<span class="built_in">printf</span>(<span class="string">"Dud: getbuf returned 0x%x\n"</span>, val);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"> <span class="comment">/* Buffer size for getbuf */</span></div><div class="line"> <span class="meta">#<span class="meta-keyword">define</span> NORMAL_BUFFER_SIZE 32</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">getbuf</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">char</span> buf[NORMAL_BUFFER_SIZE];</div><div class="line">	Gets(buf);</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>从命题人的角度分析，这个getbuf()是考察重点。鉴于它想用32个字节的数组容纳键盘输入的数据，看起来像个老实人，试探它一下：<br><img src="/2017/12/04/stack-overflow/typestring.png" width="80%" height="80%"><br>我写了34个字符还能让我走，果然是个老实人，可以欺负。</p>
 <p>现在可以定一个小目标：通过外部输入，让test函数执行它的第二个条件分支语句<strong>else if (val == cookie) {…</strong></p>
 <p>分析一下，要让首先要让val==cookie成立。(考虑到这是一个assignment，当然要有机制来防止抄袭，这里cookie就是一个根据用户名生成的一个值。这里我的用户名使用的是bovik，对应的cookie值是0x1005b2b7)<br>就是说，要把val改为0x1005b2b7。又观察到val = getfuf()，所以我们只需要把getbuf()的返回值从1改为0x1005b2b7就好了。</p>
@@ -383,14 +402,13 @@
 <p>手写汇编代码，主要包含的要点：</p>
 <ul>
 <li>修改返回值是主要目的：<br><strong>movl $0x1005b2b7,%eax</strong></li>
-<li>模拟函数调用：<br><strong>pushl $0x8048dbe</strong><br><strong>pushl %ebp</strong><br><strong>movl %esp,%ebp</strong><br><strong>subl $0x38,%esp</strong><br>…<br>模拟函数调用是必要的：由于程序不知道我们修改了返回地址，在执行注入代码时，框架指针和栈指针和test的是一样的(认为我们已经返回到了test中)。如果要让<strong>注入代码</strong>的ret正常返回到test中，在ret之前就需要让栈的状态和getbuf的栈状态相同。如何做到相同？模拟getbuf的函数调用。<br>在模拟之前，首先要理解函数的调用过程：<ol>
+<li><p>模拟函数调用：<br><strong>pushl $0x8048dbe</strong><br><strong>pushl %ebp</strong><br><strong>movl %esp,%ebp</strong><br><strong>subl $0x38,%esp</strong><br>…<br>模拟函数调用是必要的：由于程序不知道我们修改了返回地址，在执行注入代码时，框架指针和栈指针和test的是一样的(认为我们已经返回到了test中)。如果要让<strong>注入代码</strong>的ret正常返回到test中，在ret之前就需要让栈的状态和getbuf的栈状态相同。如何做到相同？模拟getbuf的函数调用。<br>在模拟之前，首先要理解函数的调用过程：</p>
+<ol>
 <li><code>call，它的动作是push-and-jump(返回地址压栈，PC跳转);</code></li>
 <li><code>push %ebp和mov %esp,%ebp(框架和栈指针合并);</code></li>
-<li><code>sub %esp(为该函数分配栈空间，以便存放局部变量);</code><blockquote>
-<p>由于我们第一步是通过hack了ret来实现的jump，所以并没有完全地按照call的动作，为了完全模拟，需要地址压栈，因此就不难理解第一行的<br><strong>pushl $0x8048dbe</strong>  (test中调用getbuf的下一行的地址)。</p>
-</blockquote>
-</li>
+<li><code>sub %esp(为该函数分配栈空间，以便存放局部变量);</code></li>
 </ol>
+<p>由于我们第一步是通过hack了ret来实现的jump，所以并没有完全地按照call的动作，为了完全模拟，需要地址压栈，因此就不难理解第一行的<br><strong>pushl $0x8048dbe</strong>  (test中调用getbuf的下一行的地址)。</p>
 </li>
 <li>把控制权交回给test：<br><strong>leave</strong><br><strong>ret</strong><br>和getbuf函数的结束操作一样就行了:) 这里就顺便复习下leave和ret吧：<ol>
 <li><code>leave是mov %ebp,%esp和pop %ebp(合并框架和栈指针，ebp回退到上一级函数状态)</code></li>
@@ -399,11 +417,14 @@
 </li>
 </ul>
 <p>最后的机器代码长这样：<br><img src="/2017/12/04/stack-overflow/machineCode.png" width="100%" height="100%"><br>从字符输入的起始位置替换：</p>
-<blockquote>
-<p><code>68 be 8d 04 08 55 89 e5</code><br><code>83 ec 38 b8 b7 b2 05 10</code><br><code>c9 c3 00 00 fc 1d fb f7</code><br><code>e0 35 68 55 ee 42 ef f7</code><br><code>60 1d fb f7 7e a5 04 08</code><br><code>e0 35 68 55 88 35 68 55</code></p>
-</blockquote>
-<p>将这段机器指令用./hex2raw转换存到string.txt,<br><code>$ ./bufbomb -u bovik &lt; string.txt</code><br><img src="/2017/12/04/stack-overflow/finish1.png" width="100%" height="100%"></p>
-<p>大功告成。<br><img src="/2017/12/04/stack-overflow/fakeEnd.png" width="100%" height="100%"></p>
+<pre><code>68 be 8d 04 08 55 89 e5
+83 ec 38 b8 b7 b2 05 10
+c9 c3 00 00 fc 1d fb f7
+e0 35 68 55 ee 42 ef f7
+60 1d fb f7 7e a5 04 08
+e0 35 68 55 88 35 68 55
+</code></pre><p>将这段机器指令用./hex2raw转换存到string.txt,<br><code>$ ./bufbomb -u bovik &lt; string.txt</code><br><img src="/2017/12/04/stack-overflow/finish1.png" width="100%" height="100%"></p>
+<p>大功告成。</p>
 <p><br><br><br><br><br><br><br><br><br></p>
 <p>但是，还没有结束。<br>我们刚刚完成的是对一个“每次运行都使用相同栈地址”的演示程序的攻击。然鹅，在实际上，绝大多数的程序都会使用ASLR(address-space layout randomization)来作为保护。ASLR中的技术之一：栈随机化(stack randomization)能够有效防止栈溢出攻击。其主要表现为：在不同的时间运行同一段代码，里面使用到的栈地址都很可能不同。这可以通过”每次在程序执行前，在栈上分配一段随机大小的空间”来实现。</p>
 <p>这样对于攻击者来说，在覆盖返回地址的时候不得不思考一个问题：-跳转到哪？-当然是能够执行我给它的机器指令的地方啊。-就是哪个地方？ -好像还真不好说，每次都不一样。</p>
@@ -461,7 +482,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/杂谈/" rel="tag"># 杂谈</a>
+            <a href="/tags/栈溢出/" rel="tag"># 栈溢出</a>
           
         </div>
       
@@ -483,6 +504,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/26/gdb-trick/" rel="prev" title="GDB奇技淫巧">
+                GDB奇技淫巧 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -534,17 +559,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -559,12 +575,21 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
           
 
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
@@ -572,7 +597,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -622,22 +647,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-text"></span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
         <div class="back-to-top">
@@ -658,8 +667,8 @@
       <div class="footer-inner">
         <div class="copyright" >
   
-  &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
