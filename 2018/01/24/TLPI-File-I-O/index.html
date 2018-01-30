@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,tlpi," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这一章介绍的接口有：open、read、write、close、lseek、ioctl、fcntl、dup/dup2、pread/pwrite、readv/writev、msktemp。">
+<meta name="keywords" content="linux,tlpi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TLPI-File I&#x2F;O">
+<meta property="og:url" content="tangenta.github.io/2018/01/24/TLPI-File-I-O/index.html">
+<meta property="og:site_name" content="Road to PI&#x2F;2">
+<meta property="og:description" content="这一章介绍的接口有：open、read、write、close、lseek、ioctl、fcntl、dup/dup2、pread/pwrite、readv/writev、msktemp。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/images/fileio-standardfiledescriptor.png">
+<meta property="og:image" content="/images/fileio-filedescriptor-tables.png">
+<meta property="og:image" content="/images/fileio-open.png">
+<meta property="og:image" content="/images/fileio-open-flags.png">
+<meta property="og:image" content="/images/fileio-read.png">
+<meta property="og:image" content="/images/fileio-write.png">
+<meta property="og:image" content="/images/fileio-close.png">
+<meta property="og:image" content="/images/fileio-lseek.png">
+<meta property="og:image" content="/images/fileio-lseek-whence.png">
+<meta property="og:image" content="/images/fileio-ioctl.png">
+<meta property="og:image" content="/images/fileio-fcntl.png">
+<meta property="og:image" content="/images/fileio-dup.png">
+<meta property="og:image" content="/images/fileio-dup2.png">
+<meta property="og:image" content="/images/fileio-pread-pwrite.png">
+<meta property="og:image" content="/images/fileio-readv-writev.png">
+<meta property="og:image" content="/images/fileio-readv-writev-iov.png">
+<meta property="og:image" content="/images/fileio-truncate-ftruncate.png">
+<meta property="og:image" content="/images/fileio-mkstemp.png">
+<meta property="og:updated_time" content="2018-01-30T14:12:49.507Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TLPI-File I&#x2F;O">
+<meta name="twitter:description" content="这一章介绍的接口有：open、read、write、close、lseek、ioctl、fcntl、dup/dup2、pread/pwrite、readv/writev、msktemp。">
+<meta name="twitter:image" content="/images/fileio-standardfiledescriptor.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="tangenta.github.io/2018/01/24/TLPI-File-I-O/"/>
+
+
+
+
+
+  <title>TLPI-File I/O | Road to PI/2</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Road to PI/2</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2018/01/24/TLPI-File-I-O/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tangenta">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Road to PI/2">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">TLPI-File I/O</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T23:14:00+08:00">
+                2018-01-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-01-30T22:12:49+08:00">
+                2018-01-30
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这一章介绍的接口有：open、read、write、close、lseek、ioctl、fcntl、dup/dup2、pread/pwrite、readv/writev、msktemp。</p>
+<a id="more"></a>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="文件和文件标识符"><a href="#文件和文件标识符" class="headerlink" title="文件和文件标识符"></a>文件和文件标识符</h3><p>文件标识符（file descriptor，常用fd表示）是一个非负整数，程序中用于表示已经被打开了的所有文件。这里的“文件”包括pipes，FIFOs，sockets，terminals，devices等等。每一个进程都有独立的文件标识符集合。</p>
+<p>每一个程序启动时都默认打开了三个文件，分别是标准输入流、标准输出流以及标准错误流，对应的正整数为0,1,2。</p>
+<p><img src="/images/fileio-standardfiledescriptor.png" alt="upload successful"></p>
+<p>文件标识符与已打开文件的关系：在unix系统中，有三个结构由内核维护，分别是：单个进程内的文件标识符表（per-process fd table）、系统范围的“已打开文件”表（open file description table）、文件系统节点表（i-node table）。为方便期间，下面简称表一、表二、表三。</p>
+<ul>
+<li>单个进程内的文件标识符表（表一）：存在于每个进程中，每个单元表示<strong>被该进程打开着</strong>的文件。包含的信息有，文件标识符控制标记（这里只有close-on-exec？）和指向表二中某一单元的指针。</li>
+<li>系统范围的“已打开文件”表（表二）：存在于整个系统中，代表系统中所有<strong>被打开着</strong>的文件。包含当前文件指针偏移量、文件状态属性、文件访问控制权限、信号驱动IO设置，和指向表三中某一单元的指针。</li>
+<li>文件系统节点表（表三）：表示系统中<strong>所有</strong>的文件。包含文件类型、访问权限、文件锁列表指针、文件属性（大小、时间戳等）等。</li>
+</ul>
+<p>下图表明了三者之间的联系：</p>
+<p><img src="/images/fileio-filedescriptor-tables.png" alt="upload successful"></p>
+<p>简单总结一下特点：</p>
+<ol>
+<li>同一进程的不同标识符可以指向同一个被打开着的文件，如进程A的 fd0 和fd20，可以用重定向（dup/dup2/fcntl）实现; </li>
+<li>不同进程的标识符也可以指向同一个被打开着的文件，如 A::fd2 和 B::fd2，例如fork。</li>
+<li>不同的“被打开着的文件”可以指向同一个文件。例如open同一个文件多次。</li>
+</ol>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>在系统接口编程中，如果一个函数或程序片段满足原子性，则CPU在执行这一片段的过程不会被打断（不会进行进程间代码执行的切换，或称上下文切换（context switch））。所有的系统函数都满足原子性。</p>
+<p>原子性可以避免进程间的竞争冲突。例如两个进程同时对一个文件作写入操作，如果CPU在执行系统函数的过程中不断地切换上下文，最终会导致文件内容在顺序上不可预测。</p>
+<h2 id="接口介绍"><a href="#接口介绍" class="headerlink" title="接口介绍"></a>接口介绍</h2><p>与文件输入输出相关的系统函数主要有以下几个：</p>
+<table>
+<thead>
+<tr>
+<th>system_call_name(Type1 arg1, Type2 arg2, …) -&gt; ReturnType</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开文件    <code>open(const char* pathname, int flags, .../* int mode */) -&gt; int fd</code></td>
+</tr>
+<tr>
+<td>读取文件    <code>read(int fd, const char* buffer, int count) -&gt; int numread</code></td>
+</tr>
+<tr>
+<td>写入文件    <code>write(int fd, const char* buffer, int count) -&gt; int numwritten</code></td>
+</tr>
+<tr>
+<td>关闭文件    <code>close(int fd) -&gt; int status</code></td>
+</tr>
+<tr>
+<td>改变文件指针 <code>lseek(int fd, off_t offset, int whence) -&gt; off_t ofs</code></td>
+</tr>
+<tr>
+<td>设备控制 <code>ioctl(int fd, int request, ... /* argp */) -&gt; int *depend on request*</code></td>
+</tr>
+<tr>
+<td>查询/修改文件信息 <code>fcntl(int fd, int cmd, ...) -&gt; int *depend on cmd*</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="open"><a href="#open" class="headerlink" title="open()"></a>open()</h3><p>打开文件。</p>
+<p><img src="/images/fileio-open.png" alt="upload successful"></p>
+<ul>
+<li>pathname：文件所在路径，如果是快捷方式，则找到源文件。</li>
+<li>flags： 指定了访问方式，其中必须包含只读（O_RDONLY）、只写（O_WRONLY）和读写（O_RDWR）三种方式中的一种。其余的用位或（|）的方式指定。</li>
+<li>mode（可选）：指定了新文件的访问权限，仅当flag包含O_CREAT时有效。</li>
+</ul>
+<p>flags：<br><img src="/images/fileio-open-flags.png" alt="upload successful"></p>
+<p>这里的flags分三类：</p>
+<ul>
+<li>第一类是读写控制部分，占用flags的低2位。</li>
+<li>第二类用于open的功能标志，制定了open应以什么方式工作，例如非目录报错（O_DIRECTORY）、清空文件内容（O_TRUNC）等。不能被fcntl获取或修改。</li>
+<li>第三类是文件状态，指定了文件的属性。</li>
+</ul>
+<p>[注意] 如果想让程序独占（exclusively）创建文件时（即如果文件不存在，则创建并打开它; 如果文件存在，则不做动作），一个常见的错误是：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>((fd = open(argv[<span class="number">1</span>], O_WRONLY, mode)) != <span class="number">-1</span>) &#123; <span class="comment">// 打开成功（文件存在）</span></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"file already exists\n"</span>);</div><div class="line">    close(fd);</div><div class="line">&#125; <span class="keyword">else</span> &#123;	<span class="comment">// 打开失败（文件不存在或者其他错误）&lt;--context switch</span></div><div class="line">    <span class="keyword">if</span> (errno != ENOENT)</div><div class="line">        errExit(<span class="string">"open"</span>);	<span class="comment">//其他错误</span></div><div class="line">    <span class="keyword">if</span> ((fd = open(argv[<span class="number">1</span>], O_WRONLY | O_CREAT, mode)) == <span class="number">-1</span>)</div><div class="line">        errExit(<span class="string">"open"</span>);</div><div class="line">    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"create file exclusively\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>乍一看这代码应该没什么问题。但是，仔细观察可以发现，整个程序片段不满足原子性。就是说，可能存在进程间的竞争冲突。例如，执行到箭头位置时，另一个进程创建了argv[1]对应的这个文件，导致第1行判断失效。</p>
+<p>这时，直接使用O_EXCL来打开文件可以解决这个问题：</p>
+<p><code>open(argv[1], O_WRONLY | O_CREAT | O_EXCL, mode);</code></p>
+<p>当文件存在时返回-1。另外，由于是单个系统函数，满足原子性。同理，O_APPEND也有类似的用途，解决了文件末尾写入的竞争冲突问题。</p>
+<h3 id="read"><a href="#read" class="headerlink" title="read()"></a>read()</h3><p>读取文件内容。</p>
+<p><img src="/images/fileio-read.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符，从这里读出数据。</li>
+<li>buffer：缓冲区，用于存放从文件中读出的信息。系统函数通常不会在它的内部分配空间，因此，为了实现系统函数和调用者（caller）之间的信息传递，需要调用者预先分配空间。</li>
+<li>count：需要读出的字节数。</li>
+<li>ssize_t是有符号的size_t。</li>
+</ul>
+<p>[注意] 在用read将文件的内容以字符串的形式输出（printf(“%s”, buffer)）时，例如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_READ 20</span></div><div class="line"><span class="keyword">char</span> buf[MAX_READ];</div><div class="line"><span class="keyword">if</span> (read(fd, buf, MAX_READ) == <span class="number">-1</span>)</div><div class="line">	errExit(<span class="string">"read"</span>);</div><div class="line"><span class="built_in">printf</span>(<span class="string">"The input data is: %s"</span>, buf);</div></pre></td></tr></table></figure></p>
+<p>这样写并不能正常地输出文件中的内容，原因是read不会自动添加’\0’到buf末尾（read：我怎么知道你是以字符形式读出？）。一个比较好的处理方法是，缓冲长度设为MAX_READ+1并手动添加’\0’。</p>
+<h3 id="write"><a href="#write" class="headerlink" title="write()"></a>write()</h3><p>向文件写入内容。</p>
+<p><img src="/images/fileio-write.png" alt="upload successful"></p>
+<p>参数含义与read()的一致。</p>
+<p>[注意] 如果write成功执行（无错误），不保证写入fd的字节数等于count。磁盘空间不足，或者该进程打开的文件有大小限制，都可能导致write的返回值小于count。</p>
+<h3 id="close"><a href="#close" class="headerlink" title="close()"></a>close()</h3><p>关闭文件。</p>
+<p><img src="/images/fileio-close.png" alt="upload successful"></p>
+<p>任何时候调用close，都应该检查它的返回值。</p>
+<p>显式关闭不再被使用的文件，养成良好的编程习惯从我做起。</p>
+<h3 id="lseek"><a href="#lseek" class="headerlink" title="lseek()"></a>lseek()</h3><p>改变文件指针位置。</p>
+<p><img src="/images/fileio-lseek.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符。</li>
+<li>offset：偏移量（字节）。</li>
+<li>whence：指定了偏移量从哪里开始算。whence的值可以为以下三种之一：<ul>
+<li>SEEK_SET，从头算。</li>
+<li>SEEK_CUR，从现在的位置算。</li>
+<li>SEEK_END，从文件末尾开始算。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/fileio-lseek-whence.png" alt="upload successful"></p>
+<p>[注意] lseek不能被使用在pipe、FIFO、socket或者terminal中，否则errno被置为ESPIPE。</p>
+<p>文件洞： lseek函数通过指定whence为SEEK_END，可以将文件指针移到没有数据的地方。这时如果向文件写入一些内容，原文件的末尾和新内容的开头之间就形成了空洞，文件体积（size）也随之变大; 但是这些空洞不占据磁盘空间。</p>
+<h3 id="ioctl"><a href="#ioctl" class="headerlink" title="ioctl()"></a>ioctl()</h3><p>用于设备的I/O控制，作为标准IO模型的补充。</p>
+<p><img src="/images/fileio-ioctl.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符。</li>
+<li>request：运作方式，每个设备都定义了独立的常量。其中的信息包含：输入/输出，argp的大小（字节）。</li>
+<li>argp：指向内存的指针。类型取决于request，通常用作输入输出缓冲。</li>
+</ul>
+<h3 id="fcntl"><a href="#fcntl" class="headerlink" title="fcntl()"></a>fcntl()</h3><p><img src="/images/fileio-fcntl.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符。</li>
+<li>cmd：决定了运作方式和第三个参数的类型。</li>
+</ul>
+<h4 id="获取-修改文件的flags"><a href="#获取-修改文件的flags" class="headerlink" title="获取/修改文件的flags"></a>获取/修改文件的flags</h4><p>（这里只能获取第一类和第三类flags，见open()一节）：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> flags, accessmode;</div><div class="line">flags = fcntl(fd, F_GETFL);</div><div class="line"><span class="keyword">if</span> (flags == <span class="number">-1</span>) errExit(<span class="string">"fcntl"</span>);</div></pre></td></tr></table></figure></p>
+<p>检验第一类（访问控制）flags：</p>
+<p><code>if (flags &amp; O_SYNC) printf(&quot;writes are synchronized.\n&quot;);</code></p>
+<p>检验第三类（文件状态）flags：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">accessmode = flags &amp; O_ACCMODE;</div><div class="line"><span class="keyword">if</span> (accessmode == O_WRONLY || accessmode == O_RDWR)</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"file is writable.\n"</span>);</div></pre></td></tr></table></figure></p>
+<p>[注意] 由于三个模式只占flag的低2位，这里不能简单地<code>flag &amp; O_xxx</code>。</p>
+<p>修改flags的过程是获取并重新设置flags的过程。要设置flags，只需将fcntl的cmd部分改为<strong>F_SETFL</strong>，并把flags作为第三个参数即可：<br><code>fcntl(fd, F_SETFL, flags);</code></p>
+<h4 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h4><p>功能类似于dup/dup2，cmd设为<strong>F_DUPFD</strong>，用法如下：</p>
+<p><code>new fd = fcntl(oldfd, F_DUPFD, startfd);</code></p>
+<p>作用是从startfd开始，在所有数值上大于startfd的标识符中选择最小可用的fd，使它指向oldfd指向的内容，返回新的标识符。这时对新标识符的读写相当于对oldfd的读写。</p>
+<h3 id="dup-dup2"><a href="#dup-dup2" class="headerlink" title="dup()/dup2()"></a>dup()/dup2()</h3><p>产生一个新的文件标识符，使其指向已有的被打开着的文件。</p>
+<p><img src="/images/fileio-dup.png" alt="upload successful"></p>
+<p><img src="/images/fileio-dup2.png" alt="upload successful"></p>
+<ul>
+<li>oldfd：文件标识符，指向已被进程打开了的文件。</li>
+<li>newfd：新的文件标识符。</li>
+</ul>
+<p>dup与dup2不同之处在于，dup把可用的（即未绑定打开着的文件）数值上最小的文件标识符用作新的标识符。另外，dup2会将newfd指向的文件（如果有）关闭（忽略关闭错误），除非oldfd不可用。</p>
+<h3 id="pread-pwrite"><a href="#pread-pwrite" class="headerlink" title="pread()/pwrite()"></a>pread()/pwrite()</h3><p>不改变文件指针位置的读写方式。</p>
+<p><img src="/images/fileio-pread-pwrite.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符。</li>
+<li>buf：缓冲区。</li>
+<li>count：读出/写入的最大字节数。</li>
+<li>offset：文件指针偏移量（从文件开头计算）。</li>
+</ul>
+<p>pread/pwrite的引入将lseek和read/write结合起来并赋予了原子性，避免了多线程环境下的读写竞争冲突。同时，在性能上也有所提高。</p>
+<h3 id="readv-writev"><a href="#readv-writev" class="headerlink" title="readv()/writev()"></a>readv()/writev()</h3><p>集散I/O：在一个系统调用中完成多个缓冲区的读取/写入。</p>
+<p><img src="/images/fileio-readv-writev.png" alt="upload successful"></p>
+<ul>
+<li>fd：文件标识符。</li>
+<li>iov：一些列缓冲区的集合。</li>
+<li>iovcnt：缓冲区集合的个数。</li>
+</ul>
+<p>第二个参数的结构如下图所示：</p>
+<p><img src="/images/fileio-readv-writev-iov.png" alt="upload successful"></p>
+<p>iov_base和iov_len分别指定了缓冲区的首地址和缓冲区的长度。缓冲区可以是所有类型的变量，包括结构体、整数、字符串等。</p>
+<h3 id="truncate-ftruncate"><a href="#truncate-ftruncate" class="headerlink" title="truncate()/ftruncate()"></a>truncate()/ftruncate()</h3><p>设置文件为指定大小。</p>
+<p><img src="/images/fileio-truncate-ftruncate.png" alt="upload successful"></p>
+<ul>
+<li>pathname：文件路径。</li>
+<li>fd：文件标识符。</li>
+<li>length：文件大小（字节）。</li>
+</ul>
+<p>如果length小于原文件大小，则多出的部分被丢弃; 如果length大于原文件大小，剩余部分则填充’\0’或者作为文件洞。truncate/ftruncate要求文件可访问、可写。另外，文件指针不会被改变。</p>
+<h3 id="msktemp"><a href="#msktemp" class="headerlink" title="msktemp()"></a>msktemp()</h3><p>建立一个临时文件。</p>
+<p><img src="/images/fileio-mkstemp.png" alt="upload successful"></p>
+<ul>
+<li>template：字符数组，内容为路径，最后六个字符必须为XXXXXX。函数结束时最后六个字符被替换为随机字符，使得文件名唯一。</li>
+</ul>
+<p><code>&lt;stdio.h&gt;</code>中的<code>FILE* tmpfile(void)</code>也有类似的功能，但更为简便。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    tangenta
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="tangenta.github.io/2018/01/24/TLPI-File-I-O/" title="TLPI-File I/O">tangenta.github.io/2018/01/24/TLPI-File-I-O/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/tlpi/" rel="tag"># tlpi</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/21/TLPI-系统编程概念/" rel="next" title="TLPI-系统编程概念">
+                <i class="fa fa-chevron-left"></i> TLPI-系统编程概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tangenta" />
+          <p class="site-author-name" itemprop="name">tangenta</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tangenta" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://gitee.com/tangenta" target="_blank" title="Gitee">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Gitee
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件和文件标识符"><span class="nav-text">文件和文件标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性"><span class="nav-text">原子性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口介绍"><span class="nav-text">接口介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open"><span class="nav-text">open()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read"><span class="nav-text">read()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write"><span class="nav-text">write()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#close"><span class="nav-text">close()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lseek"><span class="nav-text">lseek()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ioctl"><span class="nav-text">ioctl()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fcntl"><span class="nav-text">fcntl()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取-修改文件的flags"><span class="nav-text">获取/修改文件的flags</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重定向"><span class="nav-text">重定向</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dup-dup2"><span class="nav-text">dup()/dup2()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pread-pwrite"><span class="nav-text">pread()/pwrite()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readv-writev"><span class="nav-text">readv()/writev()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#truncate-ftruncate"><span class="nav-text">truncate()/ftruncate()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msktemp"><span class="nav-text">msktemp()</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tangenta</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
