@@ -94,7 +94,7 @@
 <meta property="og:image" content="/images/fileio-readv-writev-iov.png">
 <meta property="og:image" content="/images/fileio-truncate-ftruncate.png">
 <meta property="og:image" content="/images/fileio-mkstemp.png">
-<meta property="og:updated_time" content="2018-01-30T14:12:49.507Z">
+<meta property="og:updated_time" content="2018-02-03T02:44:31.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TLPI-File I&#x2F;O">
 <meta name="twitter:description" content="这一章介绍的接口有：open、read、write、close、lseek、ioctl、fcntl、dup/dup2、pread/pwrite、readv/writev、msktemp。">
@@ -311,8 +311,8 @@
               
                 <span class="post-meta-item-text">更新于</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-01-30T22:12:49+08:00">
-                2018-01-30
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-03T10:44:31+08:00">
+                2018-02-03
               </time>
             
           </span>
@@ -468,7 +468,7 @@
 <p>[注意] 由于三个模式只占flag的低2位，这里不能简单地<code>flag &amp; O_xxx</code>。</p>
 <p>修改flags的过程是获取并重新设置flags的过程。要设置flags，只需将fcntl的cmd部分改为<strong>F_SETFL</strong>，并把flags作为第三个参数即可：<br><code>fcntl(fd, F_SETFL, flags);</code></p>
 <h4 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h4><p>功能类似于dup/dup2，cmd设为<strong>F_DUPFD</strong>，用法如下：</p>
-<p><code>new fd = fcntl(oldfd, F_DUPFD, startfd);</code></p>
+<p><code>newfd = fcntl(oldfd, F_DUPFD, startfd);</code></p>
 <p>作用是从startfd开始，在所有数值上大于startfd的标识符中选择最小可用的fd，使它指向oldfd指向的内容，返回新的标识符。这时对新标识符的读写相当于对oldfd的读写。</p>
 <h3 id="dup-dup2"><a href="#dup-dup2" class="headerlink" title="dup()/dup2()"></a>dup()/dup2()</h3><p>产生一个新的文件标识符，使其指向已有的被打开着的文件。</p>
 <p><img src="/images/fileio-dup.png" alt="upload successful"></p>
@@ -571,6 +571,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/01/31/TLPI-Process/" rel="prev" title="TLPI-Process">
+                TLPI-Process <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -646,7 +650,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Language: C with class with stl with template with namespace.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建四则运算语法树——递归方法">
+<meta property="og:url" content="tangenta.github.io/2018/03/06/构建四则运算语法树——递归方法/index.html">
+<meta property="og:site_name" content="Road to PI&#x2F;2">
+<meta property="og:description" content="Language: C with class with stl with template with namespace.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/images/calculate-tree-recursive.png">
+<meta property="og:updated_time" content="2018-03-06T12:17:31.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="构建四则运算语法树——递归方法">
+<meta name="twitter:description" content="Language: C with class with stl with template with namespace.">
+<meta name="twitter:image" content="/images/calculate-tree-recursive.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="tangenta.github.io/2018/03/06/构建四则运算语法树——递归方法/"/>
+
+
+
+
+
+  <title>构建四则运算语法树——递归方法 | Road to PI/2</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Road to PI/2</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description"></h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="tangenta.github.io/2018/03/06/构建四则运算语法树——递归方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tangenta">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Road to PI/2">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">构建四则运算语法树——递归方法</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-06T13:21:40+08:00">
+                2018-03-06
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-06T20:17:31+08:00">
+                2018-03-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Language: C with class with stl with template with namespace.</p>
+<a id="more"></a>
+<p>前两天浏览了一位老友G的blog：<a href="http://gaufoo.com/2018/01/02/ni_to_pre_post/" target="_blank" rel="external">中缀表达式转化前后缀引发的思考</a></p>
+<p>内容大概是四则运算语法树的优雅实现，看完后闻到了一股浓郁的…C的味道。为了消除诸如指针的引用、变量名大写等骚操作带来的不适感，忍不住重新实现了一遍。</p>
+<p>本次实现借鉴(chao xi)了G的整体架构，包括类结构、函数式风格以及…变量命名——等。</p>
+<p><img src="/images/calculate-tree-recursive.png" alt="upload successful"><br>（图片来自<a href="http://gaufoo.com/2018/01/02/ni_to_pre_post/）" target="_blank" rel="external">http://gaufoo.com/2018/01/02/ni_to_pre_post/）</a></p>
+<p>稍有不同的地方是，与“G对表达式字符串扫描一次完成建立”相对应，我采用的是字符串的切割和构造来建立语法树。尽管这需要相对较大的开销，但我认为用这种方式来代替扫描逐个字符的做法更能突出中心思想。</p>
+<p>待处理的算术表达式记为expression。</p>
+<p>观察:</p>
+<ul>
+<li>一个expression由零或以上个factors通过+或-连接而成。</li>
+<li>每个factor则由零或以上个terms通过*或/连接而成。</li>
+<li>这里term是表达式的基本单位，它是一个操作数或者有括号括在最外围的整体。</li>
+<li>此外，括号括在最外围的任意整体的内部，即除去括号后，都被归为expression。</li>
+</ul>
+<p>类型定义：正如上图所示，以Expr作为基类，派生出BinExpr和NumExpr。</p>
+<p>BinExpr包含三个数据成员:运算符、第一个操作表达式和第二个操作表达式。</p>
+<p>NumExpr仅包含一个数据成员，即值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Expr</span> &#123;</span></div><div class="line">    <span class="keyword">virtual</span> ~Expr() = <span class="keyword">default</span>;</div><div class="line">&#125;;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">BinExpr</span> :</span> <span class="keyword">public</span> Expr &#123;</div><div class="line">    BinOperPtr op;</div><div class="line">    ExprPtr fst;</div><div class="line">    ExprPtr snd;</div><div class="line">    BinExpr(BinOperPtr op_p, ExprPtr fst_p, ExprPtr snd_p)</div><div class="line">        : op(op_p), fst(fst_p), snd(snd_p) &#123;&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">NumExpr</span> :</span> <span class="keyword">public</span> Expr &#123;</div><div class="line">    <span class="keyword">double</span> value;</div><div class="line">    NumExpr(<span class="keyword">double</span> v) : value(v) &#123;&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>语法树结构：二元算术运算中，语法树是二叉树。每个结点(Expr)既有可能是一颗子树(BinExpr)，也可能是叶子(NumExpr)。</p>
+<p>实现思路如下：</p>
+<p>以二叉树为骨架意味着，必然存在指针。为堆资源管理方便起见，采用智能指针shared_ptr。相应调整并确定Expr，BinExpr和NumExpr的结构后，开始实现三个核心函数：getExpr，getFactor和getTerm。它们的作用是，将expression、factor、和term转换为一个结点指针(ExprPtr)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function">ExprPtr <span class="title">getExpr</span><span class="params">(<span class="built_in">string</span> <span class="keyword">const</span>&amp;)</span></span>;</div><div class="line"><span class="function">ExprPtr <span class="title">getFactor</span><span class="params">(<span class="built_in">string</span> <span class="keyword">const</span>&amp;)</span></span>;</div><div class="line"><span class="function">ExprPtr <span class="title">getTerm</span><span class="params">(<span class="built_in">string</span> <span class="keyword">const</span>&amp;)</span></span>;</div></pre></td></tr></table></figure>
+<p>可以看到，他们的参数都是字符串。当然，这些字符串要满足一定的要求才能被传入函数中。各个函数对参数的要求如下：</p>
+<ul>
+<li>getExpr：只要满足expression的描述即可。(例如xxx +/- xxx)</li>
+<li>getFactor：要求参数满足factor的描述。（如不能存在游离在括号外面的+或-）</li>
+<li>getTerm：要求参数满足term的描述（如一个数，或者括号括起来一坨东西的整体，包括括号）。</li>
+</ul>
+<p>和一般(利用栈)建立语法树方法不同，这里的主要思路是，每次首先找出满足条件的二元运算符，以它为中心，切割两边的字符串，再分别”递归”应用getExpr/getFactor/getTerm。（即解析字符串的时候可能存在直接或间接的递归）（此处与题目遥相呼应，可以体会到作者写作技巧的高潮..高超之处）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function">ExprPtr <span class="title">getExpr</span><span class="params">(<span class="built_in">string</span> <span class="keyword">const</span> &amp;expr)</span> </span>&#123;</div><div class="line">    <span class="keyword">size_t</span> operIndex = getOper(expr, <span class="string">"+-"</span>);</div><div class="line">    <span class="keyword">if</span> (operIndex == <span class="number">0</span>) &#123; <span class="comment">// "+" or "-" not found</span></div><div class="line">        <span class="keyword">if</span> (parentheseExpr(expr))</div><div class="line">            <span class="comment">// strip outermost parenthese marks</span></div><div class="line">            <span class="keyword">return</span> getExpr(stripEnds(expr));</div><div class="line">        <span class="comment">// must be a factor</span></div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="keyword">return</span> getFactor(expr);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// found "+" or "-" as a binary operator</span></div><div class="line">    <span class="keyword">auto</span> operIter = expr.begin() + operIndex;</div><div class="line"></div><div class="line">    BinOperPtr opExpr = char2BinOper(expr[operIndex]);</div><div class="line">    ExprPtr leftExpr = getFactor(<span class="built_in">string</span>(expr, <span class="number">0</span>, operIndex));</div><div class="line">    ExprPtr rightExpr = getExpr(<span class="built_in">string</span>(operIter + <span class="number">1</span>, expr.end()));</div><div class="line">    <span class="keyword">return</span> make_shared&lt;BinExpr&gt;(opExpr, leftExpr, rightExpr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用人话说一遍：面对一个expression，首先拿到其中第一个（游离在括号外的）‘+-’运算符，用它之前的字符串构造一个factor，再用它之后的字符串构造一个expression，把三者粘成一颗树并返回。</p>
+<p>实现细节：</p>
+<p>括号处理——由于括号内的表达式具有最高优先级，因此连括号一起看，它是个term;一旦没了括号，它里面的内容就成了expression。可以想象，遇到含有括号的表达式(字符串)时，分两种情况:</p>
+<ul>
+<li>一种是括号存在于最外围，这时剥去括号并对其内容应用getExpr即可。</li>
+<li>另一种是括号不在最外围，这种情况下，只要这个表达式合法，可以断言：必定存在一个二元运算符。要获得这个运算符，首先要屏蔽掉括号内相同运算符的影响。故设定一个屏蔽开关，分别由左括号控制开、右括号控制关，仅当开关处于关闭状态且目标满足要求时返回。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">size_t</span> getOper(<span class="built_in">string</span> <span class="keyword">const</span> &amp;expr, <span class="built_in">string</span> <span class="keyword">const</span> &amp;ops) &#123;</div><div class="line">    <span class="keyword">bool</span> enable = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i != expr.size(); ++i) &#123;</div><div class="line">        <span class="keyword">char</span> ch = expr[i];</div><div class="line">        <span class="keyword">if</span> (ch == <span class="string">'('</span>) <span class="comment">// ignore entities wrapped by parentheses</span></div><div class="line">            enable = <span class="literal">false</span>;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ch == <span class="string">')'</span>)</div><div class="line">            enable = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">if</span> (enable &amp;&amp; count(begin(ops), end(ops), ch) == <span class="number">1</span>)</div><div class="line">            <span class="keyword">return</span> i;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// such a binary operator doesn't exist</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输入异常(烂尾)——这里将异常为三类：二元运算符缺操作数(“3+” “-+”)、包含未知字符(“%&amp;?”)以及括号不匹配(缺左括号、右括号或”)(“)。处理方案是首先进行表达式合法性检查。</p>
+<p>（ps： 后来发现还有”()()”，”3(2)”这些坑爹情况，关于如何一次性完成表达式的合法性检查这个问题，如果有好的想法，请email：tangenta@126.com）</p>
+<p>总结：使用函数以递归的方式建立起语法树，与一般栈方法相比，在代码中更清晰地描述了语法树的结构(例如”一个expression由factor、加减运算符及另一个expression组成”)，构建的过程也更加直观易懂，而不像栈方法——规定了每种数字符号出现时作出的响应。</p>
+<p>但是在另一方面，函数方法在性能上不如栈方法。在这个栗子中，除了函数调用开销以外，还有字符串构造析构产生的消耗。</p>
+<p>从某种程度上来说，递归方法和一般方法的差别有点类似于递归过程(recursive procedure)中“递归(recursive process)”和“迭代(iterative process)”之间的区别。</p>
+<p>最后，无源码不丈夫<a href="https://github.com/tangenta/toy/blob/master/syntatic-tree.cpp" target="_blank" rel="external">.</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    tangenta
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="tangenta.github.io/2018/03/06/构建四则运算语法树——递归方法/" title="构建四则运算语法树——递归方法">tangenta.github.io/2018/03/06/构建四则运算语法树——递归方法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/31/TLPI-Process/" rel="next" title="TLPI-Process">
+                <i class="fa fa-chevron-left"></i> TLPI-Process
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="tangenta" />
+          <p class="site-author-name" itemprop="name">tangenta</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/tangenta" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://gitee.com/tangenta" target="_blank" title="Gitee">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Gitee
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tangenta</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
