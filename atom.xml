@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="tangenta.github.io/"/>
-  <updated>2018-06-24T02:14:13.677Z</updated>
+  <updated>2018-06-18T01:57:18.190Z</updated>
   <id>tangenta.github.io/</id>
   
   <author>
@@ -15,31 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>一对括号引发的惨案</title>
-    <link href="tangenta.github.io/2018/06/23/%E4%B8%80%E5%AF%B9%E6%8B%AC%E5%8F%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%83%A8%E6%A1%88/"/>
-    <id>tangenta.github.io/2018/06/23/一对括号引发的惨案/</id>
-    <published>2018-06-23T12:41:00.000Z</published>
-    <updated>2018-06-24T02:14:13.677Z</updated>
-    
-    <content type="html"><![CDATA[<p>记录debug的开心（keng die）体验。</p><p>希望自己这种对bug的鞭尸欲永不衰减。<br><a id="more"></a></p><p><img src="/images/parentheseCrash-record1.png" alt="upload successful"></p><hr><p>17：35分，随着我的一顿操作，Ctrl+X+S几乎同时被按下，翻转棋的AI总算是完工了。然而一运行，理想与现实之间的差距总是那么遥远：</p><p><img src="/images/parentheseCrash-crash.png" alt="upload successful"></p><p>segmentation fault。我亲手栽培的电脑玩家，竟然红杏出墙了！</p><p>流利地掏出调试工具，经过（debugger的）详细分析，发现是std::vector的push_back出了问题。</p><p><img src="/images/parentheseCrash-bugLocation1.png" alt="upload successful"></p><p>上图黄色箭头指向的那行便是翻车地点。一般来说，std::vector的push_back只有在极少情况下才会出问题，例如空间不够时抛出的bad_alloc异常。而现在情况是segmentation fault，多半是因为空指针引用。所以去观察children这个变量，果然——它根本就不存在。右边可以看到children成员的值为..&lt;无法访问&gt;。</p><p>诡异的是，图片下方的stacktrace显示，同一段代码，这是<strong>第2次</strong>调用（这段函数是递归函数，名字叫buildTree）push_back了。这说明，第1次调用的时候没问题？</p><p>经过各种调试方法的多管齐下（包括“求助小伙伴调试法”），最后，我将问题聚焦在一段程序上，这段程序的结构大概是这样的：</p><p>出问题（segmentation fault）的版本：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Node*&gt; children;</div><div class="line">&#125;;</div><div class="line">...</div><div class="line">Node* newNode = <span class="keyword">new</span> Node;</div><div class="line">newNode-&gt;children.push_back(xx);</div></pre></td></tr></table></figure></p><p>能够正常运行的版本：</p><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></div><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Node*&gt; children;</div><div class="line">&#125;;</div><div class="line">...</div><div class="line">Node* newNode = <span class="keyword">new</span> Node();</div><div class="line">newNode-&gt;children.push_back(xx);</div></pre></td></tr></table></figure><p>（一起来找茬。两段代码就差一对括号）</p><p>凭借着一直以来写程序的感觉，这两段代码，应该是等价的。不过感觉不算数，于是上<a href="https://stackoverflow.com/questions/1581763/difference-between-a-pa-new-a-and-a-pa-new-a" target="_blank" rel="external">stackoverflow</a>寻找答案。</p><p><img src="/images/parentheseCrash-stackoverflow.png" alt="upload successful"></p><p>这个高赞答案的意思大概是</p><ul><li>new T 使用的是default initialized，默认初始化不会对POD（plain old data）的类数据成员进行初始化，其中的内容是不可确定的（indeterminate），而对于非POD的类成员，例如我们包含std::vector的类，则会调用默认构造函数。</li><li>new T<strong>()</strong> 使用的是value initialized，对POD的类成员使用零初始化（即0转换成相应类型），而对非POD类成员调用默认构造函数。</li></ul><p>？？？</p><p>对于std::vector，都是调用默认构造函数嘛。那没括号的版本到底有什么问题？或者说，default initializaion到底对vector有什么影响？</p><p><a href="https://en.cppreference.com/w/cpp/language/default_initialization" target="_blank" rel="external">cppreference</a> 这样说：</p><p><img src="/images/parentheseCrash-cppreference.png" alt="upload successful"></p><p>C++11之后，如果一个类T被默认初始化，则选择T的其中一个默认构造函数对数据进行初始化。</p><p>这就更晕了，难道std::vector的默认构造函数还能有很多个版本吗？</p><p>为了看清这个问题的严重性，我在翻转棋上实验了std::deque，std::set，两种容器也没能帮助我的AI逃脱segmentation fault。除此之外，如果将问题缩小：<br><img src="/images/parentheseCrash-minorErr.png" alt="upload successful"><br>bug就神秘地失踪了。（内心OS：这就能解释了，为什么我写了这么久的C++，居然从来没遇到过因为一对括号就爆炸的程序。）</p><p>扛着上吨求知欲的我，于是掏出了最后的杀手锏——至少我要知道有括号没括号之间到底有啥区别：将两段代码编译（clang++ -S）产生后的汇编代码进行了对比：</p><p><img src="/images/parentheseCrash-record.png" alt="upload successful"><br>（吐槽一下：就include了一个vector的头文件，产生了500KB的汇编代码。不过-g也有影响=-=）</p><p>可以看到，有括号的版本比没括号的多了一个<code>callq memset</code>！众所周知，memset是C里面用来填充某个数组用的函数。在这里，就是初始化。但是，这个应该是针对POD的初始化，也就是上面stackoverflow所说的。</p><p>再一次陷入僵局。我茫然地看着一堆代码，正当准备放弃的时候，余光似乎注意到了什么。</p><p><img src="/images/parentheseCrash-accident1.png" alt="upload successful"><br>（其实右边注释里的构造函数、析构函数就已经完美地诠释了我的绝望）</p><p>！！！</p><p>我什么时候加了个文件？（问号脸</p><p>得，搞半天才发现原来是我定义了两个同名类：一个在定义了Ai类的文件中，一个在不知道什么时候手贱新开的文件中——什么括号不括号的，new和new()就只有POD初始化上的不同。</p><p>将万恶之源minimaxnode.h/cpp狠狠地删掉以后，轻轻点一下构建运行，程序跑起来了..Ai的每一步落子，都让我陷入深深的思考中——不是思考怎么走，而是思考“我到底是怎么做到这么蠢的”（简称“人生的真谛”）。这经历颇像上学期遇到的uncatchable exception——还以为自己发现了什么不得了的东西。。哎。</p><p>linker的锅。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;记录debug的开心（keng die）体验。&lt;/p&gt;
-&lt;p&gt;希望自己这种对bug的鞭尸欲永不衰减。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="杂类" scheme="tangenta.github.io/categories/%E6%9D%82%E7%B1%BB/"/>
-    
-    
-      <category term="c++" scheme="tangenta.github.io/tags/c/"/>
-    
-      <category term="debug" scheme="tangenta.github.io/tags/debug/"/>
-    
-  </entry>
   
   <entry>
     <title>基础图算法BFS&amp;DFS</title>
